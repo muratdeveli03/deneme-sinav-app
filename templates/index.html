@@ -1,21 +1,81 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
+  <meta charset="UTF-8">
   <title>Deneme Sınavı</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #f2f2f2;
+    }
+
+    .form-container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      width: 800px;
+      max-width: 90%;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .soru {
+      display: flex;
+      margin-bottom: 5px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    input[type="text"] {
+      width: 40px;
+      padding: 5px;
+      text-align: center;
+    }
+
+    button {
+      display: block;
+      margin: auto;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Deneme Sınavı Cevap Girişi</h1>
-  <form method="post">
-    <input name="ad" placeholder="Ad Soyad" required><br>
-    <input name="sinif" placeholder="Sınıf" required><br>
-    <input name="okul" placeholder="Okul" required><br><br>
+  <form method="POST" class="form-container">
+    <h2>Deneme Sınavı Cevap Girişi</h2>
 
-    <label>Türkçe:</label><br><input name="turkce"><br>
-    <label>Matematik:</label><br><input name="matematik"><br>
-    <label>Fen:</label><br><input name="fen"><br>
-    <label>İngilizce:</label><br><input name="ingilizce"><br>
-    <label>Sosyal Bilgiler:</label><br><input name="sosyal"><br>
-    <label>Din Kültürü:</label><br><input name="din"><br><br>
+    <div class="section">
+      <label><strong>Ad Soyad:</strong></label><br>
+      <input type="text" name="ad" required><br>
+      <label><strong>Sınıf:</strong></label><br>
+      <input type="text" name="sinif" required><br>
+      <label><strong>Okul:</strong></label><br>
+      <input type="text" name="okul" required>
+    </div>
+
+    {% for ders, adet in dersler.items() %}
+    <div class="section">
+      <h3>{{ ders.title() }}</h3>
+      {% for i in range(1, adet+1) %}
+        <div class="soru">
+          <label for="{{ ders }}_{{ i }}">{{ i }}.</label>
+          <input type="text" name="{{ ders }}_{{ i }}" maxlength="1" pattern="[A-Da-d]" required>
+        </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
 
     <button type="submit">Sonuçları Göster</button>
   </form>
