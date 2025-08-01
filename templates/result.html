@@ -1,0 +1,6 @@
+<h2>{{ ad }} - {{ sinif }} - {{ okul }}</h2>
+<ul>
+  {% for ders, bilgi in sonuc.items() %}
+    <li><strong>{{ ders.title() }}</strong>: ✅ {{ bilgi.dogru }}, ❌ {{ bilgi.yanlis }}</li>
+  {% endfor %}
+</ul>
