@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Öğrenci Girişi</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Öğrenci Girişi</h2>
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% endif %}
+    <form method="POST">
+      <input type="text" name="code" placeholder="Giriş Kodu" required>
+      <button type="submit">Giriş Yap</button>
+    </form>
+  </div>
+</body>
+</html>
