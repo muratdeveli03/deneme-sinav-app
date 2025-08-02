@@ -2,29 +2,20 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Sonuçlar</title>
+    <title>Sonuç Sayfası</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Öğrenci Sonuçları</h1>
-        <p><strong>Öğrenci Kodu:</strong> {{ code }}</p>
+    <h2>Öğrenci Sonuçları</h2>
+    <p><strong>Öğrenci Kodu:</strong> {{ code }}</p>
 
-        {% for ders, cevaplar in results.items() %}
-            <div class="ders-sonuc {{ ders }}">
-                <h2>{{ ders.capitalize() }}</h2>
-                <div class="cevaplar">
-                    {% for i in range(cevaplar|length) %}
-                        <span class="cevap">
-                            <strong>{{ i+1 }}:</strong>
-                            {{ cevaplar[i] if cevaplar[i] else "-" }}
-                        </span>
-                    {% endfor %}
-                </div>
-            </div>
-        {% endfor %}
-
-        <a href="{{ url_for('index') }}">Yeni Giriş</a>
-    </div>
+    {% for ders, cevaplar in results.items() %}
+        <h3>{{ ders|title }}</h3>
+        <ol>
+            {% for cevap in cevaplar %}
+                <li>{{ cevap }}</li>
+            {% endfor %}
+        </ol>
+    {% endfor %}
 </body>
 </html>
