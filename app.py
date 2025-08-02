@@ -1,46 +1,33 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, session
+import json
 
 app = Flask(__name__)
+app.secret_key = "gizli_kelime"
 
-# Her dersin soru sayısı
-DERSLER = {
-    "turkce": 20,
-    "matematik": 20,
-    "fen": 20,
-    "sosyal": 10,
-    "din": 10,
-    "ingilizce": 10
-}
-
-# Örnek doğru cevaplar
-DOGRU_CEVAPLAR = {
-    "turkce": list("ABCDABCDABCDABCDABCD"),
-    "matematik": list("DCBADCBDACBDACBDACBD"),
-    "fen": list("ABBACDDCABABCDCABBDC"),
-    "sosyal": list("ABCDABCDAB"),
-    "din": list("DCDABADBDC"),
-    "ingilizce": list("CCABBDDCBA")
-}
+with open("students.json") as f:
+    STUDENT_CODES = json.load(f)
 
 @app.route("/", methods=["GET", "POST"])
-def index():
+def login():
     if request.method == "POST":
-        ad = request.form["ad"]
-        sinif = request.form["sinif"]
-        okul = request.form["okul"]
+        code = request.form.get("code")
+        if code in STUDENT_CODES:
+            session["student_code"] = code
+            return redirect(url_for("form"))
+        else:
+            return render_template("login.html", error="Geçersiz giriş kodu!")
+    return render_template("login.html")
 
-        sonuc = {}
+@app.route("/form", methods=["GET", "POST"])
+def form():
+    if "student_code" not in session:
+        return redirect(url_for("login"))
+    
+    if request.method == "POST":
+        answers = request.form.to_dict()
+        return render_template("result.html", answers=answers)
 
-        for ders, adet in DERSLER.items():
-            cevaplar = []
-            for i in range(1, adet+1):
-                key = f"{ders}_{i}"
-                girilen = request.form.get(key, "").upper()
-                cevaplar.append(girilen)
+    return render_template("form.html", student_name=STUDENT_CODES[session["student_code"]])
 
-            dogru_sayisi = sum(1 for i in range(adet) if i < len(DOGRU_CEVAPLAR[ders]) and cevaplar[i] == DOGRU_CEVAPLAR[ders][i])
-            sonuc[ders] = {"dogru": dogru_sayisi, "yanlis": adet - dogru_sayisi}
-
-        return render_template("result.html", ad=ad, sinif=sinif, okul=okul, sonuc=sonuc)
-
-    return render_template("index.html", dersler=DERSLER)
+if __name__ == "__main__":
+    app.run(debug=True)
