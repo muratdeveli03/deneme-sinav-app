@@ -1,37 +1,67 @@
 from flask import Flask, render_template, request
+import json
+
 app = Flask(__name__)
 
-# Öğrenci girişine izin verilen kodlar
-gecerli_kodlar = ["1234", "5678", "9012"]
+# Cevap anahtarlarını JSON dosyasından yükle
+with open("answer_keys.json", "r") as f:
+    ANSWER_KEYS = json.load(f)
 
-# Her dersin soru sayısı
-soru_sayilari = {
-    "turkce": 20,
-    "matematik": 20,
-    "fen": 20,
-    "inkilap": 10,
-    "din": 10,
-    "ingilizce": 10
+DERSLER = {
+    "Turkce": 20,
+    "Matematik": 20,
+    "Fen": 20,
+    "Inkilap": 10,
+    "Din": 10,
+    "Ingilizce": 10
 }
 
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        code = request.form.get("code", "").strip()
-        if code not in gecerli_kodlar:
-            return "Geçersiz öğrenci kodu!"
+        deneme_kodu = request.form.get("deneme_kodu")
+        ogrenci_kodu = request.form.get("ogrenci_kodu")
 
+        # Deneme kodu geçerli mi kontrol et
+        if deneme_kodu not in ANSWER_KEYS:
+            return "Geçersiz deneme kodu!", 400
+
+        # Doğru cevap anahtarını al
+        answer_key = ANSWER_KEYS[deneme_kodu]
+
+        student_answers = {}
         results = {}
-        for ders, adet in soru_sayilari.items():
+
+        for ders, soru_sayisi in DERSLER.items():
             cevaplar = []
-            for i in range(1, adet + 1):
-                cevap = request.form.get(f"{ders}{i}", "").strip().upper()
-                cevaplar.append(cevap if cevap else "-")
-            results[ders] = cevaplar
+            for i in range(soru_sayisi):
+                key = f"{ders}_{i+1}"
+                cevap = request.form.get(key, "").strip().upper()
+                cevaplar.append(cevap)
 
-        return render_template("result.html", code=code, results=results)
+            student_answers[ders] = cevaplar
 
-    return render_template("index.html", dersler=soru_sayilari.keys(), soru_sayilari=soru_sayilari)
+            # Doğru cevapla karşılaştır
+            dogru = 0
+            yanlis = 0
+            bos = 0
+            for i, ogr_cevap in enumerate(cevaplar):
+                if ogr_cevap == "":
+                    bos += 1
+                elif ogr_cevap == answer_key[ders][i]:
+                    dogru += 1
+                else:
+                    yanlis += 1
+
+            results[ders] = {
+                "dogru": dogru,
+                "yanlis": yanlis,
+                "bos": bos
+            }
+
+        return render_template("result.html", ogrenci_kodu=ogrenci_kodu, deneme_kodu=deneme_kodu, results=results, answers=student_answers)
+
+    return render_template("index.html", dersler=DERSLER)
 
 if __name__ == "__main__":
     app.run(debug=True)
