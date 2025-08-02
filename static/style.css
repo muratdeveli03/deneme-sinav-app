@@ -66,6 +66,24 @@ button:hover {
     color: #721c24;
     margin-bottom: 10px;
 }
+.ders-sonuc {
+    margin-bottom: 30px;
+}
+
+.cevaplar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.cevap {
+    padding: 5px 10px;
+    background-color: #f1f1f1;
+    border-radius: 6px;
+    min-width: 60px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
 
 /* Ders renklendirme */
 fieldset.turkce { border-color: #d63384; }
