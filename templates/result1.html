@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sonuç</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Cevapların Kaydedildi</h2>
+    <p>Aşağıda verdiğin cevapların listesi:</p>
+    <ul>
+      {% for key, value in answers.items() %}
+        <li>{{ key }}: {{ value if value else "(boş)" }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</body>
+</html>
