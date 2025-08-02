@@ -14,10 +14,10 @@
             <div class="ders-sonuc {{ ders }}">
                 <h2>{{ ders.capitalize() }}</h2>
                 <div class="cevaplar">
-                    {% for i, cevap in enumerate(cevaplar, 1) %}
+                    {% for i in range(cevaplar|length) %}
                         <span class="cevap">
-                            <strong>{{ i }}:</strong>
-                            {{ cevap if cevap else "-" }}
+                            <strong>{{ i+1 }}:</strong>
+                            {{ cevaplar[i] if cevaplar[i] else "-" }}
                         </span>
                     {% endfor %}
                 </div>
