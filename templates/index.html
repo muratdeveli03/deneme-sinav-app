@@ -6,33 +6,22 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Deneme Sınavı Girişi</h1>
+    <h2>Öğrenci Giriş ve Cevap Formu</h2>
+    <form method="POST">
+        <label>Öğrenci Kodu:</label>
+        <input type="text" name="code" required><br><br>
 
-        {% if error %}
-            <div class="error">{{ error }}</div>
-        {% endif %}
-
-        {% if show_form %}
-        <form method="post">
-            <label for="code">Öğrenci Kodu:</label>
-            <input type="text" name="code" id="code" required>
-
-            {% for ders, soru_sayisi in {
-                'turkce': 20, 'matematik': 20, 'fen': 20,
-                'inkilap': 10, 'din': 10, 'ingilizce': 10
-            }.items() %}
-            <fieldset class="{{ ders }}">
-                <legend>{{ ders.capitalize() }}</legend>
-                {% for i in range(soru_sayisi) %}
-                    <input type="text" name="{{ ders }}{{ i+1 }}" maxlength="1" placeholder="{{ i+1 }}">
-                {% endfor %}
-            </fieldset>
+        {% for ders in dersler %}
+        <div class="ders-container {{ ders }}">
+            <h3>{{ ders|title }}</h3>
+            {% for i in range(soru_sayilari[ders]) %}
+                <input type="text" name="{{ ders }}{{ i + 1 }}" maxlength="1" placeholder="{{ i + 1 }}">
             {% endfor %}
+        </div>
+        {% endfor %}
 
-            <button type="submit">Sonuçları Göster</button>
-        </form>
-        {% endif %}
-    </div>
+        <br>
+        <button type="submit">Gönder</button>
+    </form>
 </body>
 </html>
