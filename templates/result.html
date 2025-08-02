@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Sonuçlar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Öğrenci Sonuçları</h1>
+        <p><strong>Öğrenci Kodu:</strong> {{ code }}</p>
+
+        {% for ders, cevaplar in results.items() %}
+            <div class="ders-sonuc {{ ders }}">
+                <h2>{{ ders.capitalize() }}</h2>
+                <div class="cevaplar">
+                    {% for i, cevap in enumerate(cevaplar, 1) %}
+                        <span class="cevap">
+                            <strong>{{ i }}:</strong>
+                            {{ cevap if cevap else "-" }}
+                        </span>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+
+        <a href="{{ url_for('index') }}">Yeni Giriş</a>
+    </div>
+</body>
+</html>
