@@ -84,6 +84,56 @@ button:hover {
     text-align: center;
     border: 1px solid #ccc;
 }
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    text-align: center;
+}
+
+input[type="text"] {
+    width: 30px;
+    margin: 2px;
+    text-align: center;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.ders-container {
+    margin: 20px auto;
+    padding: 10px;
+    border-radius: 8px;
+    width: fit-content;
+}
+
+.turkce {
+    background-color: #f4cccc;
+}
+
+.matematik {
+    background-color: #cfe2f3;
+}
+
+.fen {
+    background-color: #d9ead3;
+}
+
+.inkilap {
+    background-color: #fff2cc;
+}
+
+.din {
+    background-color: #ead1dc;
+}
+
+.ingilizce {
+    background-color: #d0e0e3;
+}
+
 
 /* Ders renklendirme */
 fieldset.turkce { border-color: #d63384; }
