@@ -110,31 +110,6 @@ button {
     width: fit-content;
 }
 
-.turkce {
-    background-color: #f4cccc;
-}
-
-.matematik {
-    background-color: #cfe2f3;
-}
-
-.fen {
-    background-color: #d9ead3;
-}
-
-.inkilap {
-    background-color: #fff2cc;
-}
-
-.din {
-    background-color: #ead1dc;
-}
-
-.ingilizce {
-    background-color: #d0e0e3;
-}
-
-
 /* Ders renklendirme */
 fieldset.turkce { border-color: #d63384; }
 fieldset.matematik { border-color: #6610f2; }
