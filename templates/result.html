@@ -4,29 +4,64 @@
     <meta charset="UTF-8">
     <title>Sonuçlar</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .sonuc-kutusu {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            border-radius: 12px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .ders-tablosu {
+            margin: 20px 0;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .ders-tablosu th, .ders-tablosu td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .dogru { background-color: #c8e6c9; }    /* Yeşil */
+        .yanlis { background-color: #ffcdd2; }   /* Kırmızı */
+        .bos { background-color: #eeeeee; }      /* Gri */
+
+        h1, h2 {
+            color: #0066cc;
+        }
+    </style>
 </head>
 <body>
-    <h1>{{ ad }} - {{ deneme }} Sonuçları</h1>
+    <div class="sonuc-kutusu">
+        <h1>📊 Sonuçlar</h1>
+        <h2>{{ ad }} - {{ deneme_kodu }}</h2>
 
-    <table>
-        <tr>
-            <th>Ders</th>
-            <th>Doğru</th>
-            <th>Yanlış</th>
-            <th>Boş</th>
-            <th>Net</th>
-        </tr>
-        {% for ders, sonuc in sonuclar.items() %}
-        <tr>
-            <td>{{ ders }}</td>
-            <td>{{ sonuc['dogru'] }}</td>
-            <td>{{ sonuc['yanlis'] }}</td>
-            <td>{{ sonuc['bos'] }}</td>
-            <td>{{ sonuc['net'] }}</td>
-        </tr>
+        {% for ders, sonuc in sonuc_verileri.items() %}
+            <h3>{{ ders }}</h3>
+            <p>Doğru: {{ sonuc.dogru }}, Yanlış: {{ sonuc.yanlis }}, Boş: {{ sonuc.bos }}</p>
+            <table class="ders-tablosu">
+                <tr>
+                    <th>Soru</th>
+                    <th>Senin Cevabın</th>
+                    <th>Doğru Cevap</th>
+                </tr>
+                {% for i in range(sonuc.cevap_sayisi) %}
+                    <tr class="{% if sonuc.kullanici_cevaplari[i] == '' %}bos{% elif sonuc.kullanici_cevaplari[i] == sonuc.cevap_anahtari[i] %}dogru{% else %}yanlis{% endif %}">
+                        <td>{{ i+1 }}</td>
+                        <td>{{ sonuc.kullanici_cevaplari[i] or '-' }}</td>
+                        <td>{{ sonuc.cevap_anahtari[i] }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
         {% endfor %}
-    </table>
 
-    <a href="/">Yeni Giriş</a>
+        <a href="{{ url_for('index') }}">
+            <button style="margin-top: 20px;">🔁 Yeni Cevap Girişi</button>
+        </a>
+    </div>
 </body>
 </html>
