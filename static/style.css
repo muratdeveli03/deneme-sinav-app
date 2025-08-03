@@ -1,49 +1,58 @@
 body {
-    font-family: Arial, sans-serif;
-    padding: 20px;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f7f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 95%;
+    margin: auto;
+    padding: 2rem;
     text-align: center;
 }
 
-input[type="text"] {
-    width: 30px;
-    margin: 2px;
-    text-align: center;
+form input[type="text"] {
+    padding: 8px;
+    margin: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
 button {
-    padding: 10px 20px;
-    font-size: 16px;
     margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
 }
 
-.ders-container {
-    margin: 20px auto;
+.ders-card {
+    border-radius: 10px;
     padding: 10px;
-    border-radius: 8px;
-    width: fit-content;
+    margin: 20px 0;
+    display: inline-block;
+    width: 100%;
 }
 
-.turkce {
-    background-color: #f4cccc;
+.soru-grup {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
 }
 
-.matematik {
-    background-color: #cfe2f3;
+.ders-card input {
+    width: 30px;
+    text-align: center;
 }
 
-.fen {
-    background-color: #d9ead3;
-}
-
-.inkilap {
-    background-color: #fff2cc;
-}
-
-.din {
-    background-color: #ead1dc;
-}
-
-.ingilizce {
-    background-color: #d0e0e3;
-}
+.Turkce { background-color: #fce4ec; }
+.Matematik { background-color: #e3f2fd; }
+.Fen { background-color: #e8f5e9; }
+.Inkilap { background-color: #fff3e0; }
+.Din { background-color: #ede7f6; }
+.Ingilizce { background-color: #f3e5f5; }
