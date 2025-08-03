@@ -6,22 +6,25 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h2>Öğrenci Giriş ve Cevap Formu</h2>
-    <form method="POST">
-        <label>Öğrenci Kodu:</label>
-        <input type="text" name="code" required><br><br>
+    <div class="container">
+        <h1>Deneme Sınavı Girişi</h1>
+        <form method="POST">
+            <label for="deneme_kodu">Deneme Kodu:</label>
+            <input type="text" id="deneme_kodu" name="deneme_kodu" required>
 
-        {% for ders in dersler %}
-        <div class="ders-container {{ ders }}">
-            <h3>{{ ders|title }}</h3>
-            {% for i in range(soru_sayilari[ders]) %}
-                <input type="text" name="{{ ders }}{{ i + 1 }}" maxlength="1" placeholder="{{ i + 1 }}">
+            <label for="ogrenci_kodu">Öğrenci Kodu:</label>
+            <input type="text" id="ogrenci_kodu" name="ogrenci_kodu" required>
+
+            {% for ders, soru_sayisi in dersler.items() %}
+                <h2>{{ ders }}</h2>
+                {% for i in range(1, soru_sayisi + 1) %}
+                    <label for="{{ ders }}_{{ i }}">{{ i }}. Soru:</label>
+                    <input type="text" id="{{ ders }}_{{ i }}" name="{{ ders }}_{{ i }}" maxlength="1">
+                {% endfor %}
             {% endfor %}
-        </div>
-        {% endfor %}
 
-        <br>
-        <button type="submit">Gönder</button>
-    </form>
+            <button type="submit">Gönder</button>
+        </form>
+    </div>
 </body>
 </html>
