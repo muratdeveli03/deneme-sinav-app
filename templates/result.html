@@ -2,42 +2,31 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Sonuç Sayfası</title>
+    <title>Sonuçlar</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        .dogru { background-color: #c8e6c9; }
-        .yanlis { background-color: #ffcdd2; }
-        .bos { background-color: #eeeeee; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-        th, td { border: 1px solid #999; padding: 8px; text-align: center; }
-        h2 { background-color: #f0f0f0; padding: 10px; border-radius: 8px; }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Öğrenci Sonuçları</h1>
-        <p><strong>Öğrenci Kodu:</strong> {{ ogrenci_kodu }}</p>
-        <p><strong>Deneme Kodu:</strong> {{ deneme_kodu }}</p>
+    <h1>{{ ad }} - {{ deneme }} Sonuçları</h1>
 
-        {% for ders, sorular in sonuc.items() %}
-            <h2>{{ ders }}</h2>
-            <table>
-                <tr>
-                    <th>Soru</th>
-                    {% for i in range(1, sorular|length + 1) %}
-                        <td>{{ i }}</td>
-                    {% endfor %}
-                </tr>
-                <tr>
-                    <th>Cevap</th>
-                    {% for durum in sorular %}
-                        <td class="{{ durum[1] }}">{{ durum[0] }}</td>
-                    {% endfor %}
-                </tr>
-            </table>
+    <table>
+        <tr>
+            <th>Ders</th>
+            <th>Doğru</th>
+            <th>Yanlış</th>
+            <th>Boş</th>
+            <th>Net</th>
+        </tr>
+        {% for ders, sonuc in sonuclar.items() %}
+        <tr>
+            <td>{{ ders }}</td>
+            <td>{{ sonuc['dogru'] }}</td>
+            <td>{{ sonuc['yanlis'] }}</td>
+            <td>{{ sonuc['bos'] }}</td>
+            <td>{{ sonuc['net'] }}</td>
+        </tr>
         {% endfor %}
+    </table>
 
-        <a href="{{ url_for('index') }}">Yeni Giriş</a>
-    </div>
+    <a href="/">Yeni Giriş</a>
 </body>
 </html>
