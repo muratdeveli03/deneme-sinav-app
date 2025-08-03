@@ -49,7 +49,7 @@
                     <th>Senin Cevabın</th>
                     <th>Doğru Cevap</th>
                 </tr>
-                {% for i in range(sonuc.cevap_sayisi) %}
+                {% for i in range(sonuc.kullanici_cevaplari|length) %}
                     <tr class="{% if sonuc.kullanici_cevaplari[i] == '' %}bos{% elif sonuc.kullanici_cevaplari[i] == sonuc.cevap_anahtari[i] %}dogru{% else %}yanlis{% endif %}">
                         <td>{{ i+1 }}</td>
                         <td>{{ sonuc.kullanici_cevaplari[i] or '-' }}</td>
