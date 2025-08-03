@@ -13,8 +13,6 @@ def load_students():
             students[row['ogrenci_kodu']] = row['ogrenci_adi']
     return students
 
-ogrenciler = load_students()
-
 # Cevap anahtarlarını JSON'dan yükle
 def load_answer_keys():
     with open('answer_keys.json', 'r', encoding='utf-8') as f:
@@ -40,8 +38,13 @@ def index():
 
         yanitlar = {}
         sonuc = {}
+        analiz = {}
 
         for ders in dersler:
+            dogru = 0
+            yanlis = 0
+            bos = 0
+
             yanitlar[ders] = []
             sonuc[ders] = []
 
@@ -51,41 +54,36 @@ def index():
 
                 if not kullanici_cevap:
                     sonuc[ders].append('-')
+                    bos += 1
                 elif kullanici_cevap == dogru_cevap.upper():
                     sonuc[ders].append('✔')
+                    dogru += 1
                 else:
                     sonuc[ders].append('✘')
-                    
-                # Net hesaplama
-            istatistik = {}
-            for ders in dersler:
-                dogru = sonuc[ders].count('✔')
-                yanlis = sonuc[ders].count('✘')
-                bos = sonuc[ders].count('-')
-                net = dogru - (yanlis / 3)
-                istatistik[ders] = {
-                'dogru': dogru,
-                'yanlis': yanlis,
-                'bos': bos,
-                'net': round(net, 2)
-                    }
+                    yanlis += 1
+
+            net = dogru - (yanlis / 3)
+            analiz[ders] = {
+                "dogru": dogru,
+                "yanlis": yanlis,
+                "bos": bos,
+                "net": round(net, 2)
+            }
 
         return render_template('result.html',
                                kod=ogrenci_kodu,
                                ad=ogrenciler[ogrenci_kodu],
                                yanitlar=yanitlar,
                                sonuc=sonuc,
-                               deneme_kodu=deneme_kodu,
-                              istatistik=istatistik)
+                               analiz=analiz,
+                               deneme_kodu=deneme_kodu)
 
     return render_template('index.html', hata=None, dersler=get_dersler())
 
-# Cevap anahtarlarından ders ve soru sayılarını al
 def get_dersler():
     cevap_anahtarlari = load_answer_keys()
     if not cevap_anahtarlari:
         return {}
-    # İlk deneme setinden ders ve soru sayılarını çıkar
     first_key = next(iter(cevap_anahtarlari))
     return {ders: len(sorular) for ders, sorular in cevap_anahtarlari[first_key].items()}
 
