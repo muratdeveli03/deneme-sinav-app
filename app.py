@@ -79,6 +79,14 @@ def index():
                                deneme_kodu=deneme_kodu)
 
     return render_template('index.html', hata=None, dersler=get_dersler())
+    
+def puan_hesapla(netler):
+    with open('katsayilar.json', 'r', encoding='utf-8') as f:
+        katsayilar = json.load(f)
+    
+    temel_puan = katsayilar.pop("temel_puan", 200)
+    puan = temel_puan + sum(net * katsayilar.get(ders, 0) for ders, net in netler.items())
+    return round(puan, 2)
 
 def get_dersler():
     cevap_anahtarlari = load_answer_keys()
