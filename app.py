@@ -55,13 +55,28 @@ def index():
                     sonuc[ders].append('✔')
                 else:
                     sonuc[ders].append('✘')
+                    
+                # Net hesaplama
+            istatistik = {}
+            for ders in dersler:
+                dogru = sonuc[ders].count('✔')
+                yanlis = sonuc[ders].count('✘')
+                bos = sonuc[ders].count('-')
+                net = dogru - (yanlis / 3)
+                istatistik[ders] = {
+                'dogru': dogru,
+                'yanlis': yanlis,
+                'bos': bos,
+                'net': round(net, 2)
+                    }
 
         return render_template('result.html',
                                kod=ogrenci_kodu,
                                ad=ogrenciler[ogrenci_kodu],
                                yanitlar=yanitlar,
                                sonuc=sonuc,
-                               deneme_kodu=deneme_kodu)
+                               deneme_kodu=deneme_kodu,
+                              istatistik=istatistik)
 
     return render_template('index.html', hata=None, dersler=get_dersler())
 
