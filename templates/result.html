@@ -2,117 +2,83 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Sonuçlar - {{ ad }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Sonuçlar</title>
     <style>
         body {
-            font-family: "Segoe UI", sans-serif;
-            background-color: #f2f7fb;
-            margin: 0;
+            font-family: Arial;
+            background-color: #f9f9f9;
             padding: 20px;
         }
-        .container {
-            max-width: 1000px;
-            margin: auto;
-            background-color: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
         h1, h2 {
+            color: #333;
+        }
+        table {
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #bbb;
+            padding: 8px;
             text-align: center;
-            color: #2c3e50;
         }
-        .student-info {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 18px;
-            color: #34495e;
+        th {
+            background-color: #eee;
         }
-        .ders-sonuc {
-            margin-top: 30px;
-            border-top: 1px solid #ccc;
-            padding-top: 20px;
+        .dogru {
+            color: green;
         }
-        .ders-sonuc h3 {
-            margin-bottom: 10px;
-            color: #2980b9;
+        .yanlis {
+            color: red;
         }
-        .cevaplar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .soru {
-            width: 35px;
-            height: 35px;
-            text-align: center;
-            line-height: 35px;
-            border-radius: 5px;
-            font-weight: bold;
-            background-color: #ecf0f1;
-            position: relative;
-        }
-        .soru::after {
-            content: attr(data-durum);
-            position: absolute;
-            right: -10px;
-            top: -10px;
-            font-size: 14px;
-            color: white;
-            background-color: #2ecc71;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            line-height: 18px;
-        }
-        .soru[data-durum="✘"]::after {
-            background-color: #e74c3c;
-        }
-        .soru[data-durum="-"]::after {
-            background-color: #95a5a6;
-        }
-        .geri {
-            display: block;
-            margin: 30px auto 0;
-            padding: 10px 20px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            text-align: center;
-            text-decoration: none;
-            font-size: 16px;
-            transition: 0.3s;
-        }
-        .geri:hover {
-            background-color: #2980b9;
+        .bos {
+            color: gray;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Sonuçlar</h1>
-        <div class="student-info">
-            <p><strong>Adı:</strong> {{ ogrenci_adi }}</p>
-            <p><strong>Öğrenci Kodu:</strong> {{ ogrenci_kodu }}</p>
-            <p><strong>Deneme:</strong> {{ deneme_kodu }}</p>
-        </div>
+    <h1>{{ ad }} - Öğrenci Kodu: {{ kod }}</h1>
+    <h2>Deneme: {{ deneme_kodu }}</h2>
 
-        {% for ders, cevaplar in yanitlar.items() %}
-            <div class="ders-sonuc">
-                <h3>{{ ders }}</h3>
-                <div class="cevaplar">
-                    {% for i in range(cevaplar|length) %}
-                        <div class="soru" data-durum="{{ sonuc[ders][i] }}">
-                            {{ cevaplar[i] }}
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
-        {% endfor %}
+    {% for ders, cevaplar in sonuc.items() %}
+        <h3>{{ ders }}</h3>
+        <table>
+            <tr>
+                <th>Soru No</th>
+                {% for i in range(1, cevaplar|length + 1) %}
+                    <td>{{ i }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th>Öğrenci Cevapları</th>
+                {% for cevap in yanitlar[ders] %}
+                    <td>{{ cevap }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th>Doğru/Yanlış</th>
+                {% for sonuc_tek in cevaplar %}
+                    <td class="{% if sonuc_tek == '✔' %}dogru{% elif sonuc_tek == '✘' %}yanlis{% else %}bos{% endif %}">
+                        {{ sonuc_tek }}
+                    </td>
+                {% endfor %}
+            </tr>
+        </table>
 
-        <a class="geri" href="/">Yeni Giriş</a>
-    </div>
+        <table>
+            <tr>
+                <th>Doğru</th>
+                <th>Yanlış</th>
+                <th>Boş</th>
+                <th>Net</th>
+            </tr>
+            <tr>
+                <td>{{ istatistik[ders]['dogru'] }}</td>
+                <td>{{ istatistik[ders]['yanlis'] }}</td>
+                <td>{{ istatistik[ders]['bos'] }}</td>
+                <td>{{ istatistik[ders]['net'] }}</td>
+            </tr>
+        </table>
+    {% endfor %}
 </body>
 </html>
