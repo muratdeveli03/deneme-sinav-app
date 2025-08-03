@@ -26,8 +26,8 @@ def index():
     cevap_anahtarlari = load_answer_keys()
 
     if request.method == 'POST':
-        ogrenci_kodu = request.form['ogrenci_kodu'].strip()
-        deneme_kodu = request.form['deneme_kodu'].strip()
+        ogrenci_kodu = request.form.get('ogrenci_kodu', '').strip()
+        deneme_kodu = request.form.get('deneme_kodu', '').strip()
 
         if ogrenci_kodu not in ogrenciler:
             return render_template('index.html', hata="Geçersiz öğrenci kodu.", dersler=get_dersler())
