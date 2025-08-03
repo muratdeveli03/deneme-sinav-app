@@ -8,7 +8,7 @@
     "İngilizce":["A", "B", "C", "D", "A", "B", "C", "D", "A", "B"]
   },
 
-  "deneme2": {
+  "sinankuzucu": {
     "Türkce":   ["B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A"],
     "Matematik":["C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B"],
     "Fen":      ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D"],
