@@ -6,50 +6,25 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Deneme Sınavı Girişi</h1>
-    <form action="/sonuc" method="post">
-        <label for="kod">Öğrenci Kodu:</label>
-        <input type="text" id="kod" name="kod" required><br><br>
+    <div class="container">
+        <h1>Deneme Sınavı Cevap Girişi</h1>
+        <form method="post" action="/">
+            <input type="text" name="ogrenci_kodu" placeholder="Öğrenci Kodu" required>
+            <input type="text" name="deneme_kodu" placeholder="Deneme Kodu" required>
 
-        <label for="deneme">Deneme Seçin:</label>
-        <select name="deneme" id="deneme" required>
-            {% for deneme in denemeler %}
-                <option value="{{ deneme }}">{{ deneme }}</option>
+            {% for ders, soru_sayisi in dersler.items() %}
+                <div class="ders-card {{ ders }}">
+                    <h2>{{ ders }}</h2>
+                    <div class="soru-grup">
+                        {% for i in range(1, soru_sayisi + 1) %}
+                            <input type="text" name="{{ ders }}_{{ i }}" maxlength="1" placeholder="{{ i }}">
+                        {% endfor %}
+                    </div>
+                </div>
             {% endfor %}
-        </select><br><br>
 
-        <h3>Türkçe (20):</h3>
-        {% for i in range(20) %}
-            <input name="Turkce_{{ i }}" maxlength="1" size="1">
-        {% endfor %}
-
-        <h3>Matematik (20):</h3>
-        {% for i in range(20) %}
-            <input name="Matematik_{{ i }}" maxlength="1" size="1">
-        {% endfor %}
-
-        <h3>Fen (20):</h3>
-        {% for i in range(20) %}
-            <input name="Fen_{{ i }}" maxlength="1" size="1">
-        {% endfor %}
-
-        <h3>İnkılap (10):</h3>
-        {% for i in range(10) %}
-            <input name="Inkilap_{{ i }}" maxlength="1" size="1">
-        {% endfor %}
-
-        <h3>Din (10):</h3>
-        {% for i in range(10) %}
-            <input name="Din_{{ i }}" maxlength="1" size="1">
-        {% endfor %}
-
-        <h3>İngilizce (10):</h3>
-        {% for i in range(10) %}
-            <input name="Ingilizce_{{ i }}" maxlength="1" size="1">
-        {% endfor %}
-
-        <br><br>
-        <input type="submit" value="Gönder">
-    </form>
+            <button type="submit">Sonuçları Göster</button>
+        </form>
+    </div>
 </body>
 </html>
