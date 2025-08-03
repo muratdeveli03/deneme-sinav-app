@@ -1,77 +1,67 @@
 from flask import Flask, render_template, request, redirect, url_for
 import csv
+import json
 
 app = Flask(__name__)
 
-# Öğrenci giriş kodları ve adları
-ogrenciler = {
-    '1234': 'Ali',
-    '5678': 'Ayşe',
-    '9012': 'Mehmet',
-}
+# Öğrenci listesini CSV'den oku
+def load_students():
+    ogrenciler = {}
+    with open('student_codes.csv', 'r', encoding='utf-8') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            if len(row) == 2:
+                kod, ad = row
+                ogrenciler[kod.strip()] = ad.strip()
+    return ogrenciler
 
-# Deneme kodlarına göre cevap anahtarları
-cevap_anahtarlari = {
-    'deneme1': {
-        'Turkce':    ['A', 'B', 'C'],
-        'Matematik': ['B', 'C', 'D'],
-        'Fen':       ['D', 'A', 'C'],
-        'Inkilap':   ['C', 'D', 'A'],
-        'Din':       ['A', 'A', 'B'],
-        'Ingilizce': ['B', 'C', 'D'],
-    },
-    'deneme2': {
-        'Turkce':    ['C', 'C', 'A'],
-        'Matematik': ['D', 'D', 'B'],
-        'Fen':       ['A', 'B', 'C'],
-        'Inkilap':   ['A', 'B', 'C'],
-        'Din':       ['C', 'D', 'A'],
-        'Ingilizce': ['D', 'C', 'B'],
-    }
-}
+# Cevap anahtarlarını JSON'dan yükle
+def load_answer_keys():
+    with open('answer_keys.json', 'r', encoding='utf-8') as f:
+        return json.load(f)
 
-# Anasayfa (giriş ve cevap formu)
+ogrenciler = load_students()
+cevap_anahtarlari = load_answer_keys()
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        ogrenci_kodu = request.form.get('ogrenci_kodu')
-        deneme_kodu = request.form.get('deneme_kodu')
+        girilen_kod = request.form['kod'].strip()
+        deneme_kodu = request.form['deneme_kodu'].strip()
 
-        if ogrenci_kodu not in ogrenciler:
-            return render_template('index.html', hata="Geçersiz öğrenci kodu")
+        if girilen_kod not in ogrenciler:
+            return render_template('index.html', hata="Geçersiz öğrenci kodu.")
 
         if deneme_kodu not in cevap_anahtarlari:
-            return render_template('index.html', hata="Geçersiz deneme kodu")
+            return render_template('index.html', hata="Geçersiz deneme kodu.")
 
-        # Cevapları topla
+        cevap_anahtari = cevap_anahtarlari[deneme_kodu]
+
         dersler = ['Turkce', 'Matematik', 'Fen', 'Inkilap', 'Din', 'Ingilizce']
-        ogrenci_cevaplari = {}
-        for ders in dersler:
-            ogrenci_cevaplari[ders] = []
-            for i in range(1, 4):
-                cevap = request.form.get(f"{ders}_{i}")
-                ogrenci_cevaplari[ders].append(cevap.strip().upper() if cevap else '')
-
-        # Cevapları kontrol et
+        yanitlar = {}
         sonuc = {}
-        anahtar = cevap_anahtarlari[deneme_kodu]
+
         for ders in dersler:
-            ders_sonuclari = []
-            for i, ogr_cevap in enumerate(ogrenci_cevaplari[ders]):
-                dogru_cevap = anahtar[ders][i]
-                if ogr_cevap == '':
-                    durum = 'bos'
-                elif ogr_cevap == dogru_cevap:
-                    durum = 'dogru'
+            yanitlar[ders] = []
+            sonuc[ders] = []
+            for i in range(len(cevap_anahtari[ders])):
+                cevap = request.form.get(f'{ders}_{i+1}', '').strip().upper()
+                yanitlar[ders].append(cevap if cevap else '-')
+                dogru_cevap = cevap_anahtari[ders][i].upper()
+                if not cevap:
+                    sonuc[ders].append('-')  # Boş bırakılmış
+                elif cevap == dogru_cevap:
+                    sonuc[ders].append('✔')
                 else:
-                    durum = 'yanlis'
-                ders_sonuclari.append((ogr_cevap or '-', durum))
-            sonuc[ders] = ders_sonuclari
+                    sonuc[ders].append('✘')
 
         return render_template('result.html',
-                               ogrenci_kodu=ogrenci_kodu,
-                               deneme_kodu=deneme_kodu,
-                               sonuc=sonuc)
+                               kod=girilen_kod,
+                               ad=ogrenciler[girilen_kod],
+                               yanitlar=yanitlar,
+                               sonuc=sonuc,
+                               deneme_kodu=deneme_kodu)
+
     return render_template('index.html', hata=None)
 
 if __name__ == '__main__':
