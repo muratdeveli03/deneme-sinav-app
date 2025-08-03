@@ -2,83 +2,68 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Sonuçlar</title>
+    <title>Sonuç Sayfası</title>
     <style>
         body {
             font-family: Arial;
-            background-color: #f9f9f9;
+            background-color: #f3f3f3;
+            color: #333;
             padding: 20px;
         }
         h1, h2 {
-            color: #333;
+            color: #2c3e50;
         }
         table {
-            border-collapse: collapse;
-            margin-bottom: 30px;
             width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
         }
         th, td {
-            border: 1px solid #bbb;
-            padding: 8px;
+            border: 1px solid #999;
+            padding: 10px;
             text-align: center;
         }
         th {
-            background-color: #eee;
+            background-color: #3498db;
+            color: white;
         }
-        .dogru {
-            color: green;
-        }
-        .yanlis {
-            color: red;
-        }
-        .bos {
-            color: gray;
+        .net-box {
+            background-color: #ecf0f1;
+            padding: 10px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <h1>{{ ad }} - Öğrenci Kodu: {{ kod }}</h1>
-    <h2>Deneme: {{ deneme_kodu }}</h2>
+    <h1>Sonuçlar</h1>
+    <h2>Öğrenci: {{ ad }} | Kod: {{ kod }} | Deneme: {{ deneme_kodu }}</h2>
 
-    {% for ders, cevaplar in sonuc.items() %}
+    {% for ders in yanitlar %}
         <h3>{{ ders }}</h3>
         <table>
             <tr>
-                <th>Soru No</th>
-                {% for i in range(1, cevaplar|length + 1) %}
-                    <td>{{ i }}</td>
+                {% for i in range(1, yanitlar[ders]|length + 1) %}
+                    <th>{{ i }}</th>
                 {% endfor %}
             </tr>
             <tr>
-                <th>Öğrenci Cevapları</th>
                 {% for cevap in yanitlar[ders] %}
                     <td>{{ cevap }}</td>
                 {% endfor %}
             </tr>
             <tr>
-                <th>Doğru/Yanlış</th>
-                {% for sonuc_tek in cevaplar %}
-                    <td class="{% if sonuc_tek == '✔' %}dogru{% elif sonuc_tek == '✘' %}yanlis{% else %}bos{% endif %}">
-                        {{ sonuc_tek }}
-                    </td>
+                {% for durum in sonuc[ders] %}
+                    <td>{{ durum }}</td>
                 {% endfor %}
             </tr>
         </table>
 
-        <table>
-            <tr>
-                <th>Doğru</th>
-                <th>Yanlış</th>
-                <th>Boş</th>
-                <th>Net</th>
-            </tr>
-            <tr>
-                <td>{{ istatistik[ders]['dogru'] }}</td>
-                <td>{{ istatistik[ders]['yanlis'] }}</td>
-                <td>{{ istatistik[ders]['bos'] }}</td>
-                <td>{{ istatistik[ders]['net'] }}</td>
-            </tr>
-        </table>
+        <div class="net-box">
+            <strong>Doğru:</strong> {{ analiz[ders].dogru }} |
+            <strong>Yanlış:</strong> {{ analiz[ders].yanlis }} |
+            <strong>Boş:</strong> {{ analiz[ders].bos }} |
+            <strong>Net:</strong> {{ analiz[ders].net }}
+        </div>
     {% endfor %}
 </body>
 </html>
