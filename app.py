@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request
 import csv
 import json
 
@@ -20,49 +20,59 @@ def load_answer_keys():
     with open('answer_keys.json', 'r', encoding='utf-8') as f:
         return json.load(f)
 
-ogrenciler = load_students()
-cevap_anahtarlari = load_answer_keys()
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    ogrenciler = load_students()
+    cevap_anahtarlari = load_answer_keys()
+
     if request.method == 'POST':
-        girilen_kod = request.form['kod'].strip()
+        ogrenci_kodu = request.form['ogrenci_kodu'].strip()
         deneme_kodu = request.form['deneme_kodu'].strip()
 
-        if girilen_kod not in ogrenciler:
-            return render_template('index.html', hata="Geçersiz öğrenci kodu.")
+        if ogrenci_kodu not in ogrenciler:
+            return render_template('index.html', hata="Geçersiz öğrenci kodu.", dersler=get_dersler())
 
         if deneme_kodu not in cevap_anahtarlari:
-            return render_template('index.html', hata="Geçersiz deneme kodu.")
+            return render_template('index.html', hata="Geçersiz deneme kodu.", dersler=get_dersler())
 
         cevap_anahtari = cevap_anahtarlari[deneme_kodu]
+        dersler = cevap_anahtari.keys()
 
-        dersler = ['Turkce', 'Matematik', 'Fen', 'Inkilap', 'Din', 'Ingilizce']
         yanitlar = {}
         sonuc = {}
 
         for ders in dersler:
             yanitlar[ders] = []
             sonuc[ders] = []
-            for i in range(len(cevap_anahtari[ders])):
-                cevap = request.form.get(f'{ders}_{i+1}', '').strip().upper()
-                yanitlar[ders].append(cevap if cevap else '-')
-                dogru_cevap = cevap_anahtari[ders][i].upper()
-                if not cevap:
-                    sonuc[ders].append('-')  # Boş bırakılmış
-                elif cevap == dogru_cevap:
+
+            for i, dogru_cevap in enumerate(cevap_anahtari[ders]):
+                kullanici_cevap = request.form.get(f'{ders}_{i+1}', '').strip().upper()
+                yanitlar[ders].append(kullanici_cevap if kullanici_cevap else '-')
+
+                if not kullanici_cevap:
+                    sonuc[ders].append('-')
+                elif kullanici_cevap == dogru_cevap.upper():
                     sonuc[ders].append('✔')
                 else:
                     sonuc[ders].append('✘')
 
         return render_template('result.html',
-                               kod=girilen_kod,
-                               ad=ogrenciler[girilen_kod],
+                               kod=ogrenci_kodu,
+                               ad=ogrenciler[ogrenci_kodu],
                                yanitlar=yanitlar,
                                sonuc=sonuc,
                                deneme_kodu=deneme_kodu)
 
-    return render_template('index.html', hata=None)
+    return render_template('index.html', hata=None, dersler=get_dersler())
+
+# Cevap anahtarlarından ders ve soru sayılarını al
+def get_dersler():
+    cevap_anahtarlari = load_answer_keys()
+    if not cevap_anahtarlari:
+        return {}
+    # İlk deneme setinden ders ve soru sayılarını çıkar
+    first_key = next(iter(cevap_anahtarlari))
+    return {ders: len(sorular) for ders, sorular in cevap_anahtarlari[first_key].items()}
 
 if __name__ == '__main__':
     app.run(debug=True)
