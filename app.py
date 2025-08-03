@@ -1,67 +1,78 @@
-from flask import Flask, render_template, request
-import json
+from flask import Flask, render_template, request, redirect, url_for
+import csv
 
 app = Flask(__name__)
 
-# Cevap anahtarlarını JSON dosyasından yükle
-with open("answer_keys.json", "r") as f:
-    ANSWER_KEYS = json.load(f)
-
-DERSLER = {
-    "Turkce": 20,
-    "Matematik": 20,
-    "Fen": 20,
-    "Inkilap": 10,
-    "Din": 10,
-    "Ingilizce": 10
+# Öğrenci giriş kodları ve adları
+ogrenciler = {
+    '1234': 'Ali',
+    '5678': 'Ayşe',
+    '9012': 'Mehmet',
 }
 
-@app.route("/", methods=["GET", "POST"])
+# Deneme kodlarına göre cevap anahtarları
+cevap_anahtarlari = {
+    'deneme1': {
+        'Turkce':    ['A', 'B', 'C'],
+        'Matematik': ['B', 'C', 'D'],
+        'Fen':       ['D', 'A', 'C'],
+        'Inkilap':   ['C', 'D', 'A'],
+        'Din':       ['A', 'A', 'B'],
+        'Ingilizce': ['B', 'C', 'D'],
+    },
+    'deneme2': {
+        'Turkce':    ['C', 'C', 'A'],
+        'Matematik': ['D', 'D', 'B'],
+        'Fen':       ['A', 'B', 'C'],
+        'Inkilap':   ['A', 'B', 'C'],
+        'Din':       ['C', 'D', 'A'],
+        'Ingilizce': ['D', 'C', 'B'],
+    }
+}
+
+# Anasayfa (giriş ve cevap formu)
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    if request.method == "POST":
-        deneme_kodu = request.form.get("deneme_kodu")
-        ogrenci_kodu = request.form.get("ogrenci_kodu")
+    if request.method == 'POST':
+        ogrenci_kodu = request.form.get('ogrenci_kodu')
+        deneme_kodu = request.form.get('deneme_kodu')
 
-        # Deneme kodu geçerli mi kontrol et
-        if deneme_kodu not in ANSWER_KEYS:
-            return "Geçersiz deneme kodu!", 400
+        if ogrenci_kodu not in ogrenciler:
+            return render_template('index.html', hata="Geçersiz öğrenci kodu")
 
-        # Doğru cevap anahtarını al
-        answer_key = ANSWER_KEYS[deneme_kodu]
+        if deneme_kodu not in cevap_anahtarlari:
+            return render_template('index.html', hata="Geçersiz deneme kodu")
 
-        student_answers = {}
-        results = {}
+        # Cevapları topla
+        dersler = ['Turkce', 'Matematik', 'Fen', 'Inkilap', 'Din', 'Ingilizce']
+        ogrenci_cevaplari = {}
+        for ders in dersler:
+            ogrenci_cevaplari[ders] = []
+            for i in range(1, 4):
+                cevap = request.form.get(f"{ders}_{i}")
+                ogrenci_cevaplari[ders].append(cevap.strip().upper() if cevap else '')
 
-        for ders, soru_sayisi in DERSLER.items():
-            cevaplar = []
-            for i in range(soru_sayisi):
-                key = f"{ders}_{i+1}"
-                cevap = request.form.get(key, "").strip().upper()
-                cevaplar.append(cevap)
-
-            student_answers[ders] = cevaplar
-
-            # Doğru cevapla karşılaştır
-            dogru = 0
-            yanlis = 0
-            bos = 0
-            for i, ogr_cevap in enumerate(cevaplar):
-                if ogr_cevap == "":
-                    bos += 1
-                elif ogr_cevap == answer_key[ders][i]:
-                    dogru += 1
+        # Cevapları kontrol et
+        sonuc = {}
+        anahtar = cevap_anahtarlari[deneme_kodu]
+        for ders in dersler:
+            ders_sonuclari = []
+            for i, ogr_cevap in enumerate(ogrenci_cevaplari[ders]):
+                dogru_cevap = anahtar[ders][i]
+                if ogr_cevap == '':
+                    durum = 'bos'
+                elif ogr_cevap == dogru_cevap:
+                    durum = 'dogru'
                 else:
-                    yanlis += 1
+                    durum = 'yanlis'
+                ders_sonuclari.append((ogr_cevap or '-', durum))
+            sonuc[ders] = ders_sonuclari
 
-            results[ders] = {
-                "dogru": dogru,
-                "yanlis": yanlis,
-                "bos": bos
-            }
+        return render_template('result.html',
+                               ogrenci_kodu=ogrenci_kodu,
+                               deneme_kodu=deneme_kodu,
+                               sonuc=sonuc)
+    return render_template('index.html', hata=None)
 
-        return render_template("result.html", ogrenci_kodu=ogrenci_kodu, deneme_kodu=deneme_kodu, results=results, answers=student_answers)
-
-    return render_template("index.html", dersler=DERSLER)
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)
