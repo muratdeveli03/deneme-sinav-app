@@ -1,69 +1,25 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <title>Sonuç Sayfası</title>
-    <style>
-        body {
-            font-family: Arial;
-            background-color: #f3f3f3;
-            color: #333;
-            padding: 20px;
-        }
-        h1, h2 {
-            color: #2c3e50;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 40px;
-        }
-        th, td {
-            border: 1px solid #999;
-            padding: 10px;
-            text-align: center;
-        }
-        th {
-            background-color: #3498db;
-            color: white;
-        }
-        .net-box {
-            background-color: #ecf0f1;
-            padding: 10px;
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Sonuçlar</h1>
-    <h2>Öğrenci: {{ ad }} | Kod: {{ kod }} | Deneme: {{ deneme_kodu }}</h2>
+<h2>Öğrenci: {{ ad }} ({{ kod }})</h2>
+<h3>Deneme Kodu: {{ deneme_kodu }}</h3>
 
-    {% for ders in yanitlar %}
-        <h3>{{ ders }}</h3>
-        <table>
-            <tr>
-                {% for i in range(1, yanitlar[ders]|length + 1) %}
-                    <th>{{ i }}</th>
-                {% endfor %}
-            </tr>
-            <tr>
-                {% for cevap in yanitlar[ders] %}
-                    <td>{{ cevap }}</td>
-                {% endfor %}
-            </tr>
-            <tr>
-                {% for durum in sonuc[ders] %}
-                    <td>{{ durum }}</td>
-                {% endfor %}
-            </tr>
-        </table>
-
-        <div class="net-box">
-            <strong>Doğru:</strong> {{ analiz[ders].dogru }} |
-            <strong>Yanlış:</strong> {{ analiz[ders].yanlis }} |
-            <strong>Boş:</strong> {{ analiz[ders].bos }} |
-            <strong>Net:</strong> {{ analiz[ders].net }}
-        </div>
+<table border="1">
+  <thead>
+    <tr>
+      <th>Ders</th>
+      <th>Doğru</th>
+      <th>Yanlış</th>
+      <th>Net</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for ders, sonuc_listesi in sonuc.items() %}
+      <tr>
+        <td>{{ ders }}</td>
+        <td>{{ sonuc_listesi | select('equalto', '✔') | list | length }}</td>
+        <td>{{ sonuc_listesi | select('equalto', '✘') | list | length }}</td>
+        <td>{{ netler[ders] }}</td>
+      </tr>
     {% endfor %}
-</body>
-</html>
+  </tbody>
+</table>
+
+<h3>Toplam Puan: {{ puan }}</h3>
