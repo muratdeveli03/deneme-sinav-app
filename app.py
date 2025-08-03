@@ -6,14 +6,14 @@ app = Flask(__name__)
 
 # Öğrenci listesini CSV'den oku
 def load_students():
-    ogrenciler = {}
-    with open('student_codes.csv', 'r', encoding='utf-8') as f:
-        reader = csv.reader(f)
+    students = {}
+    with open('student_codes.csv', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
         for row in reader:
-            if len(row) == 2:
-                kod, ad = row
-                ogrenciler[kod.strip()] = ad.strip()
-    return ogrenciler
+            students[row['ogrenci_kodu']] = row['ogrenci_adi']
+    return students
+
+ogrenciler = load_students()
 
 # Cevap anahtarlarını JSON'dan yükle
 def load_answer_keys():
