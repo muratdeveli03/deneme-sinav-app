@@ -82,7 +82,12 @@
 
         <form method="post" action="/">
             <input type="text" name="ogrenci_kodu" placeholder="Öğrenci Kodu" required>
-            <input type="text" name="deneme_kodu" placeholder="Deneme Kodu" required>
+            <select name="deneme_kodu" required>
+                <option value="">Deneme Seçin</option>
+                {% for deneme in deneme_listesi %}
+                    <option value="{{ deneme }}">{{ deneme }}</option>
+                {% endfor %}
+            </select>
 
             {% for ders, soru_sayisi in dersler.items() %}
                 <div class="ders-card">
