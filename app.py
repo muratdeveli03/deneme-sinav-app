@@ -3,6 +3,27 @@ import csv
 import json
 
 app = Flask(__name__)
+@app.route("/", methods=["GET", "POST"])
+def index():
+    with open("answer_keys.json", "r", encoding="utf-8") as f:
+        answer_keys = json.load(f)
+    deneme_listesi = list(answer_keys.keys())  # ['Deneme1', 'Deneme2', ...]
+
+    dersler = {
+        "Türkçe": 20,
+        "T.C. İnkılap Tarihi": 10,
+        "Din Kültürü ve Ahlak Bilgisi": 10,
+        "Yabancı Dil": 10,
+        "Matematik": 20,
+        "Fen Bilimleri": 20
+    }
+
+    hata = None
+    if request.method == "POST":
+        # POST işlemleri burada yapılır
+        pass
+
+    return render_template("index.html", dersler=dersler, deneme_listesi=deneme_listesi, hata=hata)
 
 # Öğrenci listesini CSV'den oku
 def load_students():
