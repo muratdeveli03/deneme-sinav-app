@@ -81,8 +81,11 @@
         {% endif %}
 
         <form method="post" action="/">
-            <input type="text" name="ogrenci_kodu" placeholder="Öğrenci Kodu" required>
-            <select name="deneme_kodu" required>
+            <label for="ogrenci_kodu" class="form-label">Öğrenci Kodu:</label>
+            <input type="text" id="ogrenci_kodu" name="ogrenci_kodu" placeholder="Öğrenci Kodu" required>
+
+            <label for="deneme_kodu" class="form-label">Deneme Seçin:</label>
+            <select id="deneme_kodu" name="deneme_kodu" required>
                 <option value="">Deneme Seçin</option>
                 {% for deneme in deneme_listesi %}
                     <option value="{{ deneme }}">{{ deneme }}</option>
