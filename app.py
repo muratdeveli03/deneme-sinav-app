@@ -3,27 +3,6 @@ import csv
 import json
 
 app = Flask(__name__)
-@app.route("/", methods=["GET", "POST"])
-def index():
-    with open("answer_keys.json", "r", encoding="utf-8") as f:
-        answer_keys = json.load(f)
-    deneme_listesi = list(answer_keys.keys())  # ['Deneme1', 'Deneme2', ...]
-
-    dersler = {
-        "Türkçe": 20,
-        "T.C. İnkılap Tarihi": 10,
-        "Din Kültürü ve Ahlak Bilgisi": 10,
-        "Yabancı Dil": 10,
-        "Matematik": 20,
-        "Fen Bilimleri": 20
-    }
-
-    hata = None
-    if request.method == "POST":
-        # POST işlemleri burada yapılır
-        pass
-
-    return render_template("index.html", dersler=dersler, deneme_listesi=deneme_listesi, hata=hata)
 
 # Öğrenci listesini CSV'den oku
 def load_students():
@@ -48,21 +27,31 @@ def puan_hesapla(netler):
     puan = temel_puan + sum(net * katsayilar.get(ders, 0) for ders, net in netler.items())
     return round(puan, 2)
 
+# Ders ve soru sayılarını çıkar
+def get_dersler():
+    cevap_anahtarlari = load_answer_keys()
+    if not cevap_anahtarlari:
+        return {}
+    first_key = next(iter(cevap_anahtarlari))
+    return {ders: len(sorular) for ders, sorular in cevap_anahtarlari[first_key].items()}
+
 # Ana sayfa ve değerlendirme
 @app.route('/', methods=['GET', 'POST'])
 def index():
     ogrenciler = load_students()
     cevap_anahtarlari = load_answer_keys()
+    deneme_listesi = list(cevap_anahtarlari.keys())
+    dersler = get_dersler()
 
     if request.method == 'POST':
         ogrenci_kodu = request.form.get('ogrenci_kodu', '').strip()
         deneme_kodu = request.form.get('deneme_kodu', '').strip()
 
         if ogrenci_kodu not in ogrenciler:
-            return render_template('index.html', hata="Geçersiz öğrenci kodu.", dersler=get_dersler())
+            return render_template('index.html', hata="Geçersiz öğrenci kodu.", dersler=dersler, deneme_listesi=deneme_listesi)
         
         if deneme_kodu not in cevap_anahtarlari:
-            return render_template('index.html', hata="Geçersiz deneme kodu.", dersler=get_dersler())
+            return render_template('index.html', hata="Geçersiz deneme kodu.", dersler=dersler, deneme_listesi=deneme_listesi)
 
         cevap_anahtari = cevap_anahtarlari[deneme_kodu]
         dersler = cevap_anahtari.keys()
@@ -105,15 +94,7 @@ def index():
                                puan=puan,
                                deneme_kodu=deneme_kodu)
 
-    return render_template('index.html', hata=None, dersler=get_dersler())
-
-# Ders ve soru sayılarını çıkar
-def get_dersler():
-    cevap_anahtarlari = load_answer_keys()
-    if not cevap_anahtarlari:
-        return {}
-    first_key = next(iter(cevap_anahtarlari))
-    return {ders: len(sorular) for ders, sorular in cevap_anahtarlari[first_key].items()}
+    return render_template('index.html', hata=None, dersler=dersler, deneme_listesi=deneme_listesi)
 
 if __name__ == '__main__':
     app.run(debug=True)
