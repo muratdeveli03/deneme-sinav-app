@@ -1,5 +1,5 @@
 {
-  "deneme1": {
+  "Paraf": {
     "Türkce":   ["A", "B", "C", "D", "A", "C", "B", "D", "C", "A", "B", "C", "D", "A", "B", "D", "C", "B", "A", "D"],
     "Matematik":["B", "A", "D", "C", "B", "A", "C", "D", "A", "B", "D", "C", "B", "A", "C", "D", "B", "A", "C", "D"],
     "Fen":      ["C", "D", "A", "B", "D", "C", "A", "B", "D", "A", "B", "C", "A", "D", "C", "B", "A", "B", "C", "D"],
@@ -8,7 +8,7 @@
     "İngilizce":["A", "B", "C", "D", "A", "B", "C", "D", "A", "B"]
   },
 
-  "sinankuzucu": {
+  "Sinan Kuzucu": {
     "Türkce":   ["B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A"],
     "Matematik":["C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B"],
     "Fen":      ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D"],
@@ -17,7 +17,7 @@
     "İngilizce":["D", "C", "B", "A", "D", "C", "B", "A", "D", "C"]
   },
   
-  "muratdeveli": {
+  "Okulisitk": {
     "Türkce":   ["B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A"],
     "Matematik":["C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B"],
     "Fen":      ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D"],
