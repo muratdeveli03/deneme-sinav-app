@@ -29,7 +29,7 @@
             flex-direction: column;
             gap: 1em;
         }
-        input[type="text"] {
+        input[type="text"], select {
             padding: 10px;
             font-size: 16px;
             border: 1px solid #ccc;
@@ -73,40 +73,61 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Deneme Sınavı Cevap Girişi</h1>
+<div class="container">
+    <h1>Deneme Sınavı Cevap Girişi</h1>
 
-        {% if hata %}
-            <div class="error-message">{{ hata }}</div>
-        {% endif %}
+    {% if hata %}
+        <div class="error-message">{{ hata }}</div>
+    {% endif %}
 
-        <form method="post" action="/">
-            <label for="ogrenci_kodu">Öğrenci Kodu:</label>
-            <input type="text" name="ogrenci_kodu" placeholder="Öğrenci Kodu" required>
+    <form method="post" action="/">
+        <input type="text" name="ogrenci_kodu" placeholder="Öğrenci Kodu" required>
 
-            <label for="deneme_kodu">Deneme Seçin:</label>
-            <select name="deneme_kodu" onchange="this.form.submit()" required>
-                <option value="">Deneme Seçin</option>
-                {% for deneme in deneme_listesi %}
-                    <option value="{{ deneme }}" {% if request.form.get('deneme_kodu') == deneme %}selected{% endif %}>{{ deneme }}</option>
-                {% endfor %}
-            </select>
+        <select name="deneme_kodu" id="deneme_kodu" required onchange="loadDersler()">
+            <option value="">Deneme Seçin</option>
+            {% for deneme in deneme_listesi %}
+                <option value="{{ deneme }}">{{ deneme }}</option>
+            {% endfor %}
+        </select>
 
-            {% if dersler %}
-                {% for ders, soru_sayisi in dersler.items() %}
-                    <div class="ders-card">
-                        <h2>{{ ders }}</h2>
-                        <div class="soru-grup">
-                            {% for i in range(1, soru_sayisi + 1) %}
-                                <input type="text" name="{{ ders }}_{{ i }}" maxlength="1" placeholder="{{ i }}">
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% endfor %}
+        <div id="dinamik-form-alani"></div>
 
-                <button type="submit">Sonuçları Göster</button>
-            {% endif %}
-        </form>
-    </div>
+        <button type="submit">Sonuçları Göster</button>
+    </form>
+</div>
+
+<script>
+    const cevapAnahtarlari = {{ cevap_anahtarlari | tojson }};
+
+    function loadDersler() {
+        const secilenDeneme = document.getElementById("deneme_kodu").value;
+        const formAlani = document.getElementById("dinamik-form-alani");
+        formAlani.innerHTML = "";
+
+        if (secilenDeneme && cevapAnahtarlari[secilenDeneme]) {
+            const dersler = cevapAnahtarlari[secilenDeneme];
+            for (const [ders, sorular] of Object.entries(dersler)) {
+                const dersDiv = document.createElement("div");
+                dersDiv.className = "ders-card";
+                dersDiv.innerHTML = `<h2>${ders}</h2>`;
+
+                const soruGrup = document.createElement("div");
+                soruGrup.className = "soru-grup";
+
+                sorular.forEach((_, index) => {
+                    const input = document.createElement("input");
+                    input.type = "text";
+                    input.name = `${ders}_${index + 1}`;
+                    input.maxLength = 1;
+                    input.placeholder = `${index + 1}`;
+                    soruGrup.appendChild(input);
+                });
+
+                dersDiv.appendChild(soruGrup);
+                formAlani.appendChild(dersDiv);
+            }
+        }
+    }
+</script>
 </body>
 </html>
