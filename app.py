@@ -41,17 +41,17 @@ def index():
     ogrenciler = load_students()
     cevap_anahtarlari = load_answer_keys()
     deneme_listesi = list(cevap_anahtarlari.keys())
-    dersler = get_dersler()
+
+    hata = None
+    dersler = {}
 
     if request.method == 'POST':
-        ogrenci_kodu = request.form.get('ogrenci_kodu', '').strip()
         deneme_kodu = request.form.get('deneme_kodu', '').strip()
 
-        if ogrenci_kodu not in ogrenciler:
-            return render_template('index.html', hata="Geçersiz öğrenci kodu.", dersler=dersler, deneme_listesi=deneme_listesi)
-        
-        if deneme_kodu not in cevap_anahtarlari:
-            return render_template('index.html', hata="Geçersiz deneme kodu.", dersler=dersler, deneme_listesi=deneme_listesi)
+        if deneme_kodu in cevap_anahtarlari:
+            dersler = {ders: len(sorular) for ders, sorular in cevap_anahtarlari[deneme_kodu].items()}
+        else:
+            hata = "Geçersiz deneme kodu"
 
         cevap_anahtari = cevap_anahtarlari[deneme_kodu]
         dersler = cevap_anahtari.keys()
