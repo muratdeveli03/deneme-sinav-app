@@ -49,22 +49,32 @@ def index():
         ogrenci_kodu = request.form.get('ogrenci_kodu', '').strip()
         deneme_kodu = request.form.get('deneme_kodu', '').strip()
 
-        if deneme_kodu not in cevap_anahtarlari:
-            hata = "Geçersiz deneme kodu"
-            return render_template('index.html', hata=hata, dersler={}, deneme_listesi=deneme_listesi)
-
         if ogrenci_kodu not in ogrenciler:
-            hata = "Geçersiz öğrenci kodu"
-            return render_template('index.html', hata=hata, dersler={}, deneme_listesi=deneme_listesi)
+            return render_template(
+                'index.html',
+                hata="Geçersiz öğrenci kodu.",
+                dersler={},
+                deneme_listesi=deneme_listesi,
+                cevap_anahtarlari=cevap_anahtarlari
+            )
+
+        if deneme_kodu not in cevap_anahtarlari:
+            return render_template(
+                'index.html',
+                hata="Geçersiz deneme kodu.",
+                dersler={},
+                deneme_listesi=deneme_listesi,
+                cevap_anahtarlari=cevap_anahtarlari
+            )
 
         cevap_anahtari = cevap_anahtarlari[deneme_kodu]
-        dersler = {ders: len(sorular) for ders, sorular in cevap_anahtari.items()}
+        dersler = cevap_anahtari.keys()
 
         yanitlar = {}
         sonuc = {}
         netler = {}
 
-        for ders in cevap_anahtari:
+        for ders in dersler:
             yanitlar[ders] = []
             sonuc[ders] = []
 
@@ -89,16 +99,25 @@ def index():
 
         puan = puan_hesapla(netler)
 
-        return render_template('result.html',
-                               kod=ogrenci_kodu,
-                               ad=ogrenciler[ogrenci_kodu],
-                               yanitlar=yanitlar,
-                               sonuc=sonuc,
-                               netler=netler,
-                               puan=puan,
-                               deneme_kodu=deneme_kodu)
+        return render_template(
+            'result.html',
+            kod=ogrenci_kodu,
+            ad=ogrenciler[ogrenci_kodu],
+            yanitlar=yanitlar,
+            sonuc=sonuc,
+            netler=netler,
+            puan=puan,
+            deneme_kodu=deneme_kodu
+        )
 
-    return render_template('index.html', hata=hata, dersler=dersler, deneme_listesi=deneme_listesi)
+    # 🔽 GET isteği ile sayfa yüklendiğinde burası çalışır
+    return render_template(
+        'index.html',
+        hata=None,
+        dersler={},
+        deneme_listesi=deneme_listesi,
+        cevap_anahtarlari=cevap_anahtarlari
+    )
 
 if __name__ == '__main__':
     app.run(debug=True)
