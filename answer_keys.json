@@ -24,5 +24,9 @@
     "İnkilap":  ["D", "C", "B", "A", "D", "C", "B", "A", "D", "C"],
     "Din":      ["B", "A", "D", "C", "B", "A", "D", "C", "B", "A"],
     "İngilizce":["D", "C", "B", "A", "D", "C", "B", "A", "D", "C"]
-  }
+  },
+  
+  "Bilgidem Akademi": {
+    "İngilizce":   ["B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B", "C", "D", "A", "B"]
+  
 }
