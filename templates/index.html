@@ -47,18 +47,21 @@
         button:hover {
             background-color: #45a049;
         }
-        .ders-card {
-            padding: 1em;
-            border-radius: 10px;
-            margin-bottom: 1em;
-            color: #fff;
-        }
+
+        /* Güvenli CSS sınıf isimleri */
         .ders-Turkce { background-color: #2196F3; }
         .ders-TCİnkilapTarihiSosyalBilgiler { background-color: #9C27B0; }
         .ders-DinKulturuveAhlakBilgisi { background-color: #4CAF50; }
         .ders-YabanciDil { background-color: #FF9800; }
         .ders-Matematik { background-color: #f44336; }
         .ders-FenBilimleri { background-color: #3F51B5; }
+
+        .ders-card {
+            padding: 1em;
+            border-radius: 10px;
+            margin-bottom: 1em;
+            color: #fff;
+        }
         .ders-card h2 {
             margin-top: 0;
         }
@@ -108,7 +111,14 @@
 
 <script>
     const cevapAnahtarlari = {{ cevap_anahtarlari | tojson }};
-    const dersSirasi = ["Türkçe", "T.C. İnkılap Tarihi (Sosyal Bilgiler)", "Din Kültürü ve Ahlak Bilgisi", "Yabancı Dil", "Matematik", "Fen Bilimleri"];
+    const dersSirasi = [
+        "Türkce",
+        "T.C. İnkılap Tarihi (Sosyal Bilgiler)",
+        "Din Kültürü ve Ahlak Bilgisi",
+        "Yabancı Dil",
+        "Matematik",
+        "Fen Bilimleri"
+    ];
 
     function loadDersler() {
         const secilenDeneme = document.getElementById("deneme_kodu").value;
@@ -118,11 +128,10 @@
         if (secilenDeneme && cevapAnahtarlari[secilenDeneme]) {
             const dersler = cevapAnahtarlari[secilenDeneme];
 
-            // Belirtilen sıraya göre sırala
             dersSirasi.forEach(ders => {
                 if (dersler[ders]) {
+                    const className = ders.replace(/[^\w]/g, '');
                     const dersDiv = document.createElement("div");
-                    const className = ders.replace(/[^\w-]/g, '').replace(/ /g, '');
                     dersDiv.className = `ders-card ders-${className}`;
                     dersDiv.innerHTML = `<h2>${ders}</h2>`;
 
