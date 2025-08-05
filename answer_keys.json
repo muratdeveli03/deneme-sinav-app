@@ -1,6 +1,6 @@
 {
   "Paraf": {
-    "Türkçe":                                 ["A", "B", "C", "D", "A", "C", "B", "D", "C", "A", "B", "C", "D", "A", "B", "D", "C", "B", "A", "D"],
+    "Türkce":                                 ["A", "B", "C", "D", "A", "C", "B", "D", "C", "A", "B", "C", "D", "A", "B", "D", "C", "B", "A", "D"],
     "Matematik":                              ["B", "A", "D", "C", "B", "A", "C", "D", "A", "B", "D", "C", "B", "A", "C", "D", "B", "A", "C", "D"],
     "Fen Bilimleri":                          ["C", "D", "A", "B", "D", "C", "A", "B", "D", "A", "B", "C", "A", "D", "C", "B", "A", "B", "C", "D"],
     "T.C. İnkılap Tarihi (Sosyal Bilgiler)":  ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B"],
@@ -9,7 +9,7 @@
   },
 
   "Sinan Kuzucu": {
-    "Türkçe":                                 ["A", "B", "C", "D", "A", "C", "B", "D", "C", "A", "B", "C", "D", "A", "B", "D", "C", "B", "A", "D"],
+    "Türkce":                                 ["A", "B", "C", "D", "A", "C", "B", "D", "C", "A", "B", "C", "D", "A", "B", "D", "C", "B", "A", "D"],
     "Matematik":                              ["B", "A", "D", "C", "B", "A", "C", "D", "A", "B", "D", "C", "B", "A", "C", "D", "B", "A", "C", "D"],
     "Fen Bilimleri":                          ["C", "D", "A", "B", "D", "C", "A", "B", "D", "A", "B", "C", "A", "D", "C", "B", "A", "B", "C", "D"],
     "T.C. İnkılap Tarihi (Sosyal Bilgiler)":  ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B"],
@@ -18,7 +18,7 @@
   },
   
   "Okulisitk": {
-    "Türkçe":                                 ["A", "B", "C", "D", "A", "C", "B", "D", "C", "A", "B", "C", "D", "A", "B", "D", "C", "B", "A", "D"],
+    "Türkce":                                 ["A", "B", "C", "D", "A", "C", "B", "D", "C", "A", "B", "C", "D", "A", "B", "D", "C", "B", "A", "D"],
     "Matematik":                              ["B", "A", "D", "C", "B", "A", "C", "D", "A", "B", "D", "C", "B", "A", "C", "D", "B", "A", "C", "D"],
     "Fen Bilimleri":                          ["C", "D", "A", "B", "D", "C", "A", "B", "D", "A", "B", "C", "A", "D", "C", "B", "A", "B", "C", "D"],
     "T.C. İnkılap Tarihi (Sosyal Bilgiler)":  ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B"],
