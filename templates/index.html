@@ -81,29 +81,31 @@
         {% endif %}
 
         <form method="post" action="/">
-            <label for="ogrenci_kodu" class="form-label">Öğrenci Kodu:</label>
-            <input type="text" id="ogrenci_kodu" name="ogrenci_kodu" placeholder="Öğrenci Kodu" required>
+            <label for="ogrenci_kodu">Öğrenci Kodu:</label>
+            <input type="text" name="ogrenci_kodu" placeholder="Öğrenci Kodu" required>
 
-            <label for="deneme_kodu" class="form-label">Deneme Seçin:</label>
-            <select id="deneme_kodu" name="deneme_kodu" required>
+            <label for="deneme_kodu">Deneme Seçin:</label>
+            <select name="deneme_kodu" onchange="this.form.submit()" required>
                 <option value="">Deneme Seçin</option>
                 {% for deneme in deneme_listesi %}
-                    <option value="{{ deneme }}">{{ deneme }}</option>
+                    <option value="{{ deneme }}" {% if request.form.get('deneme_kodu') == deneme %}selected{% endif %}>{{ deneme }}</option>
                 {% endfor %}
             </select>
 
-            {% for ders, soru_sayisi in dersler.items() %}
-                <div class="ders-card">
-                    <h2>{{ ders }}</h2>
-                    <div class="soru-grup">
-                        {% for i in range(1, soru_sayisi + 1) %}
-                            <input type="text" name="{{ ders }}_{{ i }}" maxlength="1" placeholder="{{ i }}">
-                        {% endfor %}
+            {% if dersler %}
+                {% for ders, soru_sayisi in dersler.items() %}
+                    <div class="ders-card">
+                        <h2>{{ ders }}</h2>
+                        <div class="soru-grup">
+                            {% for i in range(1, soru_sayisi + 1) %}
+                                <input type="text" name="{{ ders }}_{{ i }}" maxlength="1" placeholder="{{ i }}">
+                            {% endfor %}
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
 
-            <button type="submit">Sonuçları Göster</button>
+                <button type="submit">Sonuçları Göster</button>
+            {% endif %}
         </form>
     </div>
 </body>
