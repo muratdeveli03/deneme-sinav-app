@@ -18,37 +18,27 @@ def load_answer_keys():
     with open('answer_keys.json', 'r', encoding='utf-8') as f:
         return json.load(f)
 
-# Katsayıları yükle ve puan hesapla
+# Katsayıları yükle ve netlere göre puan hesapla
 def puan_hesapla(netler):
     with open('katsayilar.json', 'r', encoding='utf-8') as f:
         katsayilar = json.load(f)
-    
+
     temel_puan = katsayilar.pop("temel_puan", 200)
     puan = temel_puan + sum(net * katsayilar.get(ders, 0) for ders, net in netler.items())
     return round(puan, 2)
 
-# Ders ve soru sayılarını çıkar
-def get_dersler():
-    cevap_anahtarlari = load_answer_keys()
-    if not cevap_anahtarlari:
-        return {}
-    first_key = next(iter(cevap_anahtarlari))
-    return {ders: len(sorular) for ders, sorular in cevap_anahtarlari[first_key].items()}
-
-# Ana sayfa ve değerlendirme
+# Ana sayfa (index.html) ve sonuç işlemleri
 @app.route('/', methods=['GET', 'POST'])
 def index():
     ogrenciler = load_students()
     cevap_anahtarlari = load_answer_keys()
     deneme_listesi = list(cevap_anahtarlari.keys())
 
-    hata = None
-    dersler = {}
-
     if request.method == 'POST':
         ogrenci_kodu = request.form.get('ogrenci_kodu', '').strip()
         deneme_kodu = request.form.get('deneme_kodu', '').strip()
 
+        # Geçersiz öğrenci kodu
         if ogrenci_kodu not in ogrenciler:
             return render_template(
                 'index.html',
@@ -58,6 +48,7 @@ def index():
                 cevap_anahtarlari=cevap_anahtarlari
             )
 
+        # Geçersiz deneme kodu
         if deneme_kodu not in cevap_anahtarlari:
             return render_template(
                 'index.html',
@@ -68,7 +59,7 @@ def index():
             )
 
         cevap_anahtari = cevap_anahtarlari[deneme_kodu]
-        dersler = cevap_anahtari.keys()
+        dersler = list(cevap_anahtari.keys())
 
         yanitlar = {}
         sonuc = {}
@@ -77,7 +68,6 @@ def index():
         for ders in dersler:
             yanitlar[ders] = []
             sonuc[ders] = []
-
             dogru_sayisi = 0
             yanlis_sayisi = 0
 
@@ -110,7 +100,7 @@ def index():
             deneme_kodu=deneme_kodu
         )
 
-    # 🔽 GET isteği ile sayfa yüklendiğinde burası çalışır
+    # GET isteği: Form gösterilsin
     return render_template(
         'index.html',
         hata=None,
