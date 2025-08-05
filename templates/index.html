@@ -54,11 +54,11 @@
             color: #fff;
         }
         .ders-Türkçe { background-color: #2196F3; }
-        .ders-İnkilap { background-color: #9C27B0; }
-        .ders-Din { background-color: #4CAF50; }
-        .ders-İngilizce { background-color: #FF9800; }
+        .ders-T.C. İnkılap Tarihi (Sosyal Bilgiler) { background-color: #9C27B0; }
+        .ders-Din Kültürü ve Ahlak Bilgisi { background-color: #4CAF50; }
+        .ders-Yabancı Dil { background-color: #FF9800; }
         .ders-Matematik { background-color: #f44336; }
-        .ders-Fen { background-color: #3F51B5; }
+        .ders-Fen Bilimleri { background-color: #3F51B5; }
 
         .ders-card h2 {
             margin-top: 0;
@@ -109,7 +109,7 @@
 
 <script>
     const cevapAnahtarlari = {{ cevap_anahtarlari | tojson }};
-    const dersSirasi = ["Türkçe", "İnkilap", "Din", "İngilizce", "Matematik", "Fen"];
+    const dersSirasi = ["Türkçe", "T.C. İnkılap Tarihi (Sosyal Bilgiler)", "Din Kültürü ve Ahlak Bilgisi", "Yabancı Dil", "Matematik", "Fen Bilimleri"];
 
     function loadDersler() {
         const secilenDeneme = document.getElementById("deneme_kodu").value;
