@@ -48,11 +48,18 @@
             background-color: #45a049;
         }
         .ders-card {
-            background: #f9f9f9;
             padding: 1em;
             border-radius: 10px;
             margin-bottom: 1em;
+            color: #fff;
         }
+        .ders-Türkçe { background-color: #2196F3; }
+        .ders-İnkilap { background-color: #9C27B0; }
+        .ders-Din { background-color: #4CAF50; }
+        .ders-İngilizce { background-color: #FF9800; }
+        .ders-Matematik { background-color: #f44336; }
+        .ders-Fen { background-color: #3F51B5; }
+
         .ders-card h2 {
             margin-top: 0;
         }
@@ -60,10 +67,14 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
             gap: 5px;
+            margin-top: 10px;
         }
         .soru-grup input {
             text-align: center;
             font-weight: bold;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
         .error-message {
             color: red;
@@ -98,6 +109,7 @@
 
 <script>
     const cevapAnahtarlari = {{ cevap_anahtarlari | tojson }};
+    const dersSirasi = ["Türkçe", "İnkilap", "Din", "İngilizce", "Matematik", "Fen"];
 
     function loadDersler() {
         const secilenDeneme = document.getElementById("deneme_kodu").value;
@@ -106,26 +118,30 @@
 
         if (secilenDeneme && cevapAnahtarlari[secilenDeneme]) {
             const dersler = cevapAnahtarlari[secilenDeneme];
-            for (const [ders, sorular] of Object.entries(dersler)) {
-                const dersDiv = document.createElement("div");
-                dersDiv.className = "ders-card";
-                dersDiv.innerHTML = `<h2>${ders}</h2>`;
 
-                const soruGrup = document.createElement("div");
-                soruGrup.className = "soru-grup";
+            // Belirtilen sıraya göre sırala
+            dersSirasi.forEach(ders => {
+                if (dersler[ders]) {
+                    const dersDiv = document.createElement("div");
+                    dersDiv.className = `ders-card ders-${ders}`;
+                    dersDiv.innerHTML = `<h2>${ders}</h2>`;
 
-                sorular.forEach((_, index) => {
-                    const input = document.createElement("input");
-                    input.type = "text";
-                    input.name = `${ders}_${index + 1}`;
-                    input.maxLength = 1;
-                    input.placeholder = `${index + 1}`;
-                    soruGrup.appendChild(input);
-                });
+                    const soruGrup = document.createElement("div");
+                    soruGrup.className = "soru-grup";
 
-                dersDiv.appendChild(soruGrup);
-                formAlani.appendChild(dersDiv);
-            }
+                    dersler[ders].forEach((_, index) => {
+                        const input = document.createElement("input");
+                        input.type = "text";
+                        input.name = `${ders}_${index + 1}`;
+                        input.maxLength = 1;
+                        input.placeholder = `${index + 1}`;
+                        soruGrup.appendChild(input);
+                    });
+
+                    dersDiv.appendChild(soruGrup);
+                    formAlani.appendChild(dersDiv);
+                }
+            });
         }
     }
 </script>
