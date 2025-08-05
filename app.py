@@ -59,7 +59,8 @@ def index():
             )
 
         cevap_anahtari = cevap_anahtarlari[deneme_kodu]
-        dersler = list(cevap_anahtari.keys())
+        sira = ["Türkçe", "T.C. İnkılap Tarihi", "Din Kültürü ve Ahlak Bilgisi", "Yabancı Dil", "Matematik", "Fen Bilimleri"]
+        dersler = [ders for ders in sira if ders in cevap_anahtari]
 
         yanitlar = {}
         sonuc = {}
