@@ -53,13 +53,12 @@
             margin-bottom: 1em;
             color: #fff;
         }
-        .ders-Türkçe { background-color: #2196F3; }
-        .ders-T.C. İnkılap Tarihi (Sosyal Bilgiler) { background-color: #9C27B0; }
-        .ders-Din Kültürü ve Ahlak Bilgisi { background-color: #4CAF50; }
-        .ders-Yabancı Dil { background-color: #FF9800; }
+        .ders-Turkce { background-color: #2196F3; }
+        .ders-TCİnkilapTarihiSosyalBilgiler { background-color: #9C27B0; }
+        .ders-DinKulturuveAhlakBilgisi { background-color: #4CAF50; }
+        .ders-YabanciDil { background-color: #FF9800; }
         .ders-Matematik { background-color: #f44336; }
-        .ders-Fen Bilimleri { background-color: #3F51B5; }
-
+        .ders-FenBilimleri { background-color: #3F51B5; }
         .ders-card h2 {
             margin-top: 0;
         }
@@ -123,7 +122,8 @@
             dersSirasi.forEach(ders => {
                 if (dersler[ders]) {
                     const dersDiv = document.createElement("div");
-                    dersDiv.className = `ders-card ders-${ders}`;
+                    const className = ders.replace(/[^\w-]/g, '').replace(/ /g, '');
+                    dersDiv.className = `ders-card ders-${className}`;
                     dersDiv.innerHTML = `<h2>${ders}</h2>`;
 
                     const soruGrup = document.createElement("div");
