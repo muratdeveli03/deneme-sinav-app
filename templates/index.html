@@ -20,7 +20,6 @@
         h1 {
             text-align: center;
             color: #333;
-            margin-bottom: 1em;
         }
         form {
             display: flex;
@@ -51,12 +50,12 @@
             margin-bottom: 1em;
             color: white;
         }
-        .ders-Turkce { background-color: #2196F3; }
-        .ders-TC-Inkilap-Tarihi--Sosyal-Bilgiler- { background-color: #9C27B0; }
-        .ders-Din-Kulturu-ve-Ahlak-Bilgisi { background-color: #4CAF50; }
-        .ders-Yabanci-Dil { background-color: #FF9800; }
-        .ders-Matematik { background-color: #f44336; }
-        .ders-Fen-Bilimleri { background-color: #3F51B5; }
+        .ders-turkce { background-color: #2196F3; }
+        .ders-t-c-inkilap-tarihi-sosyal-bilgiler { background-color: #9C27B0; }
+        .ders-din-kulturu-ve-ahlak-bilgisi { background-color: #4CAF50; }
+        .ders-yabanci-dil { background-color: #FF9800; }
+        .ders-matematik { background-color: #f44336; }
+        .ders-fen-bilimleri { background-color: #3F51B5; }
 
         .ders-card h2 {
             margin-top: 0;
@@ -78,13 +77,16 @@
             color: red;
             text-align: center;
             font-weight: bold;
-            margin-bottom: 1em;
         }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>Deneme Sınavı Cevap Girişi</h1>
+
+    {% if hata %}
+        <div class="error-message">{{ hata }}</div>
+    {% endif %}
 
     <form method="post" action="/">
         <input type="text" name="ogrenci_kodu" placeholder="Öğrenci Kodu" required>
@@ -103,9 +105,10 @@
 </div>
 
 <script>
+    // Serverdan gelen JSON'u JS objesine çeviriyoruz
     const cevapAnahtarlari = {{ cevap_anahtarlari | tojson }};
 
-    // Yeni istenen ders sırası
+    // Derslerin sıralaması
     const dersSirasi = [
         "Türkçe",
         "T.C. İnkılap Tarihi (Sosyal Bilgiler)",
@@ -115,8 +118,18 @@
         "Fen Bilimleri"
     ];
 
+    // Ders adından CSS sınıfı oluşturma (küçük harf + tire)
     function sanitizeClassName(ders) {
-        return ders.replace(/[^a-zA-Z0-9]/g, '-');
+        return ders
+          .toLowerCase()
+          .replace(/ç/g, 'c')
+          .replace(/ş/g, 's')
+          .replace(/ğ/g, 'g')
+          .replace(/ü/g, 'u')
+          .replace(/ö/g, 'o')
+          .replace(/ı/g, 'i')
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
     }
 
     function loadDersler() {
