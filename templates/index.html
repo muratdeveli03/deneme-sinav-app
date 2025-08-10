@@ -128,7 +128,7 @@
           .replace(/ü/g, 'u')
           .replace(/ö/g, 'o')
           .replace(/ı/g, 'i')
-          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/[^\w]+/g, '-')  // boşluk, parantez vs yerine tire
           .replace(/^-+|-+$/g, '');
     }
 
