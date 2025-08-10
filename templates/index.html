@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8" />
-    <title>Deneme Sınavı Cevap Girişi</title>
+    <title>Deneme Sınavı Girişi</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -48,8 +48,9 @@
             padding: 1em;
             border-radius: 10px;
             margin-bottom: 1em;
-            color: white;
+            color: #fff;
         }
+        /* Ders renkleri */
         .ders-turkce { background-color: #2196F3; }
         .ders-t-c-inkilap-tarihi-sosyal-bilgiler { background-color: #9C27B0; }
         .ders-din-kulturu-ve-ahlak-bilgisi { background-color: #4CAF50; }
@@ -105,55 +106,66 @@
 </div>
 
 <script>
-const cevapAnahtarlari = {{ cevap_anahtarlari | tojson }};
-const dersSirasi = ["Türkçe", "T.C. İnkılap Tarihi (Sosyal Bilgiler)", "Din Kültürü ve Ahlak Bilgisi", "Yabancı Dil", "Matematik", "Fen Bilimleri"];
+    // Flask'tan cevap anahtarlarını JSON olarak alıyoruz
+    const cevapAnahtarlari = {{ cevap_anahtarlari | tojson }};
 
-function sanitizeClassName(ders) {
-    return ders
-      .toLowerCase()
-      .replace(/ç/g, 'c')
-      .replace(/ş/g, 's')
-      .replace(/ğ/g, 'g')
-      .replace(/ü/g, 'u')
-      .replace(/ö/g, 'o')
-      .replace(/ı/g, 'i')
-      .replace(/[^\w]+/g, '-')
-      .replace(/^-+|-+$/g, '');
-}
+    // İstediğimiz ders sıralaması
+    const dersSirasi = [
+        "Türkçe",
+        "T.C. İnkılap Tarihi (Sosyal Bilgiler)",
+        "Din Kültürü ve Ahlak Bilgisi",
+        "Yabancı Dil",
+        "Matematik",
+        "Fen Bilimleri"
+    ];
 
-function loadDersler() {
-    const secilenDeneme = document.getElementById("deneme_kodu").value;
-    const formAlani = document.getElementById("dinamik-form-alani");
-    formAlani.innerHTML = "";
-
-    if (secilenDeneme && cevapAnahtarlari[secilenDeneme]) {
-        const dersler = cevapAnahtarlari[secilenDeneme];
-
-        dersSirasi.forEach(ders => {
-            if (dersler[ders]) {
-                const className = 'ders-' + sanitizeClassName(ders);
-                const dersDiv = document.createElement("div");
-                dersDiv.className = className + " ders-card";
-                dersDiv.innerHTML = `<h2>${ders}</h2>`;
-
-                const soruGrup = document.createElement("div");
-                soruGrup.className = "soru-grup";
-
-                dersler[ders].forEach((_, index) => {
-                    const input = document.createElement("input");
-                    input.type = "text";
-                    input.name = `${ders}_${index + 1}`;
-                    input.maxLength = 1;
-                    input.placeholder = `${index + 1}`;
-                    soruGrup.appendChild(input);
-                });
-
-                dersDiv.appendChild(soruGrup);
-                formAlani.appendChild(dersDiv);
-            }
-        });
+    // Ders isimlerinden CSS sınıf adı üretmek için fonksiyon
+    function sanitizeClassName(ders) {
+        return ders
+          .toLowerCase()
+          .replace(/ç/g, 'c')
+          .replace(/ş/g, 's')
+          .replace(/ğ/g, 'g')
+          .replace(/ü/g, 'u')
+          .replace(/ö/g, 'o')
+          .replace(/ı/g, 'i')
+          .replace(/[^\w]+/g, '-')
+          .replace(/^-+|-+$/g, '');
     }
-}
+
+    function loadDersler() {
+        const secilenDeneme = document.getElementById("deneme_kodu").value;
+        const formAlani = document.getElementById("dinamik-form-alani");
+        formAlani.innerHTML = "";
+
+        if (secilenDeneme && cevapAnahtarlari[secilenDeneme]) {
+            const dersler = cevapAnahtarlari[secilenDeneme];
+
+            dersSirasi.forEach(ders => {
+                if (dersler[ders]) {
+                    const className = 'ders-' + sanitizeClassName(ders);
+                    const dersDiv = document.createElement("div");
+                    dersDiv.className = className + " ders-card";
+                    dersDiv.innerHTML = `<h2>${ders}</h2>`;
+
+                    const soruGrup = document.createElement("div");
+                    soruGrup.className = "soru-grup";
+
+                    dersler[ders].forEach((_, index) => {
+                        const input = document.createElement("input");
+                        input.type = "text";
+                        input.name = `${ders}_${index + 1}`;
+                        input.maxLength = 1;
+                        input.placeholder = `${index + 1}`;
+                        soruGrup.appendChild(input);
+                    });
+
+                    dersDiv.appendChild(soruGrup);
+                    formAlani.appendChild(dersDiv);
+                }
+            });
+        }
+    }
 </script>
 </body>
 </html>
