@@ -5,18 +5,17 @@
     <title>Deneme Sınavı Cevap Girişi</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #eef2f7;
-            margin: 0;
-            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0; padding: 0;
         }
         .container {
-            max-width: 700px;
-            margin: 40px auto;
+            max-width: 800px;
+            margin: 50px auto;
             background: #fff;
             padding: 2em;
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
         }
         h1 {
             text-align: center;
@@ -26,41 +25,25 @@
         form {
             display: flex;
             flex-direction: column;
-            gap: 1.2em;
+            gap: 1em;
         }
         input[type="text"], select {
-            padding: 12px 15px;
+            padding: 10px;
             font-size: 16px;
-            border: 2px solid #ccc;
-            border-radius: 8px;
-            transition: border-color 0.3s ease;
-        }
-        input[type="text"]:focus, select:focus {
-            border-color: #4CAF50;
-            outline: none;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
         button {
+            padding: 12px;
             background-color: #4CAF50;
             color: white;
-            font-weight: 600;
-            font-size: 18px;
             border: none;
-            padding: 14px;
-            border-radius: 8px;
+            border-radius: 5px;
+            font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
         }
         button:hover {
-            background-color: #388E3C;
-        }
-        .error-message {
-            color: #d32f2f;
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 1em;
-            background: #ffebee;
-            padding: 10px;
-            border-radius: 8px;
+            background-color: #45a049;
         }
         .ders-card {
             padding: 1em;
@@ -68,65 +51,62 @@
             margin-bottom: 1em;
             color: white;
         }
-        .ders-Türkçe { background-color: #2196F3; }
-        .ders-T.C\. İnkılap Tarihi \(Sosyal Bilgiler\) { background-color: #9C27B0; }
-        .ders-Din Kültürü ve Ahlak Bilgisi { background-color: #4CAF50; }
-        .ders-Yabancı Dil { background-color: #FF9800; }
+        .ders-TC-Inkilap-Tarihi--Sosyal-Bilgiler- { background-color: #9C27B0; }
+        .ders-Turkce { background-color: #2196F3; }
+        .ders-Din-Kulturu-ve-Ahlak-Bilgisi { background-color: #4CAF50; }
+        .ders-Yabanci-Dil { background-color: #FF9800; }
         .ders-Matematik { background-color: #f44336; }
-        .ders-Fen Bilimleri { background-color: #3F51B5; }
+        .ders-Fen-Bilimleri { background-color: #3F51B5; }
 
         .ders-card h2 {
             margin-top: 0;
-            margin-bottom: 0.8em;
         }
         .soru-grup {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
-            gap: 6px;
+            gap: 5px;
+            margin-top: 10px;
         }
         .soru-grup input {
             text-align: center;
             font-weight: bold;
-            padding: 10px 0;
-            border-radius: 6px;
-            border: none;
-            background: rgba(255 255 255 / 0.8);
-            font-size: 16px;
-            transition: background-color 0.3s ease;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
-        .soru-grup input:focus {
-            background-color: #fff;
-            outline: 2px solid #fff;
-            box-shadow: 0 0 8px #81c784;
+        .error-message {
+            color: red;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 1em;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Deneme Sınavı Cevap Girişi</h1>
+<div class="container">
+    <h1>Deneme Sınavı Cevap Girişi</h1>
 
-        {% if hata %}
-            <div class="error-message">{{ hata }}</div>
-        {% endif %}
+    <form method="post" action="/">
+        <input type="text" name="ogrenci_kodu" placeholder="Öğrenci Kodu" required>
 
-        <form method="post" action="/">
-            <input type="text" name="ogrenci_kodu" placeholder="Öğrenci Kodu" required>
+        <select name="deneme_kodu" id="deneme_kodu" required onchange="loadDersler()">
+            <option value="">Deneme Seçin</option>
+            {% for deneme in deneme_listesi %}
+                <option value="{{ deneme }}">{{ deneme }}</option>
+            {% endfor %}
+        </select>
 
-            <select name="deneme_kodu" id="deneme_kodu" required onchange="loadDersler()">
-                <option value="">Deneme Seçin</option>
-                {% for deneme in deneme_listesi %}
-                    <option value="{{ deneme }}">{{ deneme }}</option>
-                {% endfor %}
-            </select>
+        <div id="dinamik-form-alani"></div>
 
-            <div id="dinamik-form-alani"></div>
-
-            <button type="submit">Sonuçları Göster</button>
-        </form>
-    </div>
+        <button type="submit">Sonuçları Göster</button>
+    </form>
+</div>
 
 <script>
+    // JSON verisini Flask'tan aldıysan böyle alabilirsin
     const cevapAnahtarlari = {{ cevap_anahtarlari | tojson }};
+
+    // Ders sırası JSON'daki ders isimleriyle birebir aynı olmalı:
     const dersSirasi = [
         "T.C. İnkılap Tarihi (Sosyal Bilgiler)",
         "Türkçe",
@@ -136,15 +116,9 @@
         "Fen Bilimleri"
     ];
 
-    function escapeCssClass(str) {
-        // CSS sınıfı için özel karakterleri kaçırır
-        return str.replace(/[\.\(\) ]/g, match => {
-            if(match === '.') return '\\.';
-            if(match === '(') return '\\(';
-            if(match === ')') return '\\)';
-            if(match === ' ') return '\\ ';
-            return match;
-        });
+    // Ders isimlerinden CSS sınıf ismi oluştur (özel karakterleri '-' ile değiştir)
+    function sanitizeClassName(ders) {
+        return ders.replace(/[^a-zA-Z0-9]/g, '-');
     }
 
     function loadDersler() {
@@ -158,7 +132,7 @@
             dersSirasi.forEach(ders => {
                 if (dersler[ders]) {
                     const dersDiv = document.createElement("div");
-                    dersDiv.className = "ders-card ders-" + ders.replace(/[\s\.\(\)]/g, '-');
+                    dersDiv.className = "ders-card ders-" + sanitizeClassName(ders);
                     dersDiv.innerHTML = `<h2>${ders}</h2>`;
 
                     const soruGrup = document.createElement("div");
