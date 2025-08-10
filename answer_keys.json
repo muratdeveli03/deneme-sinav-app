@@ -1,37 +1,37 @@
 {
   "Paraf": {
-    "Türkçe":                                 ["A", "B", "C", "D", "A", "C", "B", "D", "C", "A", "B", "C", "D", "A", "B", "D", "C", "B", "A", "D"],
-    "Matematik":                              ["B", "A", "D", "C", "B", "A", "C", "D", "A", "B", "D", "C", "B", "A", "C", "D", "B", "A", "C", "D"],
-    "Fen Bilimleri":                          ["C", "D", "A", "B", "D", "C", "A", "B", "D", "A", "B", "C", "A", "D", "C", "B", "A", "B", "C", "D"],
-    "İnkılap Tarihi (Sosyal Bilgiler)":  ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B"],
-    "Din Kültürü ve Ahlak Bilgisi":           ["C", "D", "A", "B", "C", "D", "A", "B", "C", "D"],
-    "Yabancı Dil":                            ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B"]
+    "Türkçe":                                  ["A", "B", "C", "D", "A", "C", "B", "D", "C", "A", "B", "C", "D", "A", "B", "D", "C", "B", "A", "D"],
+    "Matematik":                               ["B", "A", "D", "C", "B", "A", "C", "D", "A", "B", "D", "C", "B", "A", "C", "D", "B", "A", "C", "D"],
+    "Fen Bilimleri":                           ["C", "D", "A", "B", "D", "C", "A", "B", "D", "A", "B", "C", "A", "D", "C", "B", "A", "B", "C", "D"],
+    "İnkılap Tarihi (Sosyal Bilgiler)":        ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B"],
+    "Din Kültürü ve Ahlak Bilgisi":            ["C", "D", "A", "B", "C", "D", "A", "B", "C", "D"],
+    "Yabancı Dil":                             ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B"]
   },
 
   "Sinan Kuzucu": {
-    "Türkçe":                                 ["A", "B", "C", "D", "A", "C", "B", "D", "C", "A", "B", "C", "D", "A", "B", "D", "C", "B", "A", "D"],
-    "Matematik":                              ["B", "A", "D", "C", "B", "A", "C", "D", "A", "B", "D", "C", "B", "A", "C", "D", "B", "A", "C", "D"],
-    "Fen Bilimleri":                          ["C", "D", "A", "B", "D", "C", "A", "B", "D", "A", "B", "C", "A", "D", "C", "B", "A", "B", "C", "D"],
-    "İnkılap Tarihi (Sosyal Bilgiler)":  ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B"],
-    "Din Kültürü ve Ahlak Bilgisi":           ["C", "D", "A", "B", "C", "D", "A", "B", "C", "D"],
-    "Yabancı Dil":                            ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B"]
+    "Türkçe":                                  ["A", "B", "C", "D", "A", "C", "B", "D", "C", "A", "B", "C", "D", "A", "B", "D", "C", "B", "A", "D"],
+    "Matematik":                               ["B", "A", "D", "C", "B", "A", "C", "D", "A", "B", "D", "C", "B", "A", "C", "D", "B", "A", "C", "D"],
+    "Fen Bilimleri":                           ["C", "D", "A", "B", "D", "C", "A", "B", "D", "A", "B", "C", "A", "D", "C", "B", "A", "B", "C", "D"],
+    "İnkılap Tarihi (Sosyal Bilgiler)":        ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B"],
+    "Din Kültürü ve Ahlak Bilgisi":            ["C", "D", "A", "B", "C", "D", "A", "B", "C", "D"],
+    "Yabancı Dil":                             ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B"]
   },
   
   "Okulistik": {
-    "Türkçe":                                 ["A", "B", "C", "D", "A", "C", "B", "D", "C", "A", "B", "C", "D", "A", "B", "D", "C", "B", "A", "D"],
-    "Matematik":                              ["B", "A", "D", "C", "B", "A", "C", "D", "A", "B", "D", "C", "B", "A", "C", "D", "B", "A", "C", "D"],
-    "Fen Bilimleri":                          ["C", "D", "A", "B", "D", "C", "A", "B", "D", "A", "B", "C", "A", "D", "C", "B", "A", "B", "C", "D"],
-    "İnkılap Tarihi (Sosyal Bilgiler)":  ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B"],
-    "Din Kültürü ve Ahlak Bilgisi":           ["C", "D", "A", "B", "C", "D", "A", "B", "C", "D"],
-    "Yabancı Dil":                            ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B"]
+    "Türkçe":                                  ["A", "B", "C", "D", "A", "C", "B", "D", "C", "A", "B", "C", "D", "A", "B", "D", "C", "B", "A", "D"],
+    "Matematik":                               ["B", "A", "D", "C", "B", "A", "C", "D", "A", "B", "D", "C", "B", "A", "C", "D", "B", "A", "C", "D"],
+    "Fen Bilimleri":                           ["C", "D", "A", "B", "D", "C", "A", "B", "D", "A", "B", "C", "A", "D", "C", "B", "A", "B", "C", "D"],
+    "İnkılap Tarihi (Sosyal Bilgiler)":        ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B"],
+    "Din Kültürü ve Ahlak Bilgisi":            ["C", "D", "A", "B", "C", "D", "A", "B", "C", "D"],
+    "Yabancı Dil":                             ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B"]
   },
    "Hiper Zeka": {
-    "Türkçe":                                 ["A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"],
-    "Matematik":                              ["B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B"],
-    "Fen Bilimleri":                          ["C", "D", "A", "B", "D", "C", "A", "B", "D", "A", "B", "C", "A", "D", "C", "B", "A", "B", "C", "D"],
-    "İnkılap Tarihi (Sosyal Bilgiler)":  ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B"],
-    "Din Kültürü ve Ahlak Bilgisi":           ["C", "D", "A", "B", "C", "D", "A", "B", "C", "D"],
-    "Yabancı Dil":                            ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B"]
+    "Türkçe":                                  ["A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"],
+    "Matematik":                               ["B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B"],
+    "Fen Bilimleri":                           ["C", "D", "A", "B", "D", "C", "A", "B", "D", "A", "B", "C", "A", "D", "C", "B", "A", "B", "C", "D"],
+    "İnkılap Tarihi (Sosyal Bilgiler)":        ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B"],
+    "Din Kültürü ve Ahlak Bilgisi":            ["C", "D", "A", "B", "C", "D", "A", "B", "C", "D"],
+    "Yabancı Dil":                             ["A", "B", "C", "D", "A", "B", "C", "D", "A", "B"]
   },
   
    "Bilgidem Akademi": {
