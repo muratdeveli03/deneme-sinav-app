@@ -152,6 +152,39 @@ def index():
         deneme_listesi=deneme_listesi,
         cevap_anahtarlari=cevap_anahtarlari
     )
+def index():
+    with open("answer_keys.json", "r", encoding="utf-8") as f:
+        cevap_anahtarlari = json.load(f)
 
+    if request.method == "POST":
+        ogrenci_kodu = request.form["ogrenci_kodu"]
+        deneme_kodu = request.form["deneme_kodu"]
+
+        # Öğrenci cevaplarını al
+        ogrenci_cevaplari = {}
+        for ders, cevaplar in cevap_anahtarlari[deneme_kodu].items():
+            ogrenci_cevaplari[ders] = []
+            for i in range(len(cevaplar)):
+                key = f"{ders}_{i+1}"
+                ogrenci_cevaplari[ders].append(request.form.get(key, "").strip().upper())
+
+        # Sonuç hesaplama
+        sonuc = {}
+        for ders, dogru_cevaplar in cevap_anahtarlari[deneme_kodu].items():
+            dogru = sum(1 for i, c in enumerate(ogrenci_cevaplari[ders]) if c == dogru_cevaplar[i])
+            bos = sum(1 for c in ogrenci_cevaplari[ders] if c == "")
+            yanlis = len(dogru_cevaplar) - dogru - bos
+            sonuc[ders] = {"dogru": dogru, "yanlis": yanlis, "bos": bos}
+
+        return render_template(
+            "result.html",
+            ogrenci_kodu=ogrenci_kodu,
+            deneme_kodu=deneme_kodu,
+            cevaplar=ogrenci_cevaplari,
+            cevap_anahtarlari=cevap_anahtarlari[deneme_kodu],
+            sonuc=sonuc
+        )
+
+    return render_template("index.html", cevap_anahtarlari=cevap_anahtarlari, deneme_listesi=list(cevap_anahtarlari.keys()))
 if __name__ == '__main__':
     app.run(debug=True)
