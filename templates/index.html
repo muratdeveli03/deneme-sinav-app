@@ -51,8 +51,8 @@
             margin-bottom: 1em;
             color: white;
         }
-        .ders-TC-Inkilap-Tarihi--Sosyal-Bilgiler- { background-color: #9C27B0; }
         .ders-Turkce { background-color: #2196F3; }
+        .ders-TC-Inkilap-Tarihi--Sosyal-Bilgiler- { background-color: #9C27B0; }
         .ders-Din-Kulturu-ve-Ahlak-Bilgisi { background-color: #4CAF50; }
         .ders-Yabanci-Dil { background-color: #FF9800; }
         .ders-Matematik { background-color: #f44336; }
@@ -103,20 +103,18 @@
 </div>
 
 <script>
-    // JSON verisini Flask'tan aldıysan böyle alabilirsin
     const cevapAnahtarlari = {{ cevap_anahtarlari | tojson }};
 
-    // Ders sırası JSON'daki ders isimleriyle birebir aynı olmalı:
+    // Yeni istenen ders sırası
     const dersSirasi = [
-        "T.C. İnkılap Tarihi (Sosyal Bilgiler)",
         "Türkçe",
+        "T.C. İnkılap Tarihi (Sosyal Bilgiler)",
         "Din Kültürü ve Ahlak Bilgisi",
         "Yabancı Dil",
         "Matematik",
         "Fen Bilimleri"
     ];
 
-    // Ders isimlerinden CSS sınıf ismi oluştur (özel karakterleri '-' ile değiştir)
     function sanitizeClassName(ders) {
         return ders.replace(/[^a-zA-Z0-9]/g, '-');
     }
