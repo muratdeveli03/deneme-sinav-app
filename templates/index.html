@@ -1,126 +1,151 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <title>Deneme Sınavı Girişi</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8" />
+    <title>Deneme Sınavı Cevap Girişi</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef2f7;
             margin: 0;
             padding: 0;
         }
         .container {
-            max-width: 800px;
-            margin: auto;
+            max-width: 700px;
+            margin: 40px auto;
             background: #fff;
             padding: 2em;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            margin-top: 50px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
         }
         h1 {
             text-align: center;
             color: #333;
+            margin-bottom: 1em;
         }
         form {
             display: flex;
             flex-direction: column;
-            gap: 1em;
+            gap: 1.2em;
         }
         input[type="text"], select {
-            padding: 10px;
+            padding: 12px 15px;
             font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus, select:focus {
+            border-color: #4CAF50;
+            outline: none;
         }
         button {
-            padding: 12px;
             background-color: #4CAF50;
             color: white;
+            font-weight: 600;
+            font-size: 18px;
             border: none;
-            border-radius: 5px;
-            font-size: 16px;
+            padding: 14px;
+            border-radius: 8px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: #388E3C;
         }
-
-        /* Güvenli CSS sınıf isimleri */
-        .ders-Turkce       { background-color: #2196F3; }
-        .ders-Inkilap      { background-color: #9C27B0; }
-        .ders-Din          { background-color: #4CAF50; }
-        .ders-Yabanci      { background-color: #FF9800; }
-        .ders-Matematik    { background-color: #f44336; }
-        .ders-Fen          { background-color: #3F51B5; }
-
+        .error-message {
+            color: #d32f2f;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 1em;
+            background: #ffebee;
+            padding: 10px;
+            border-radius: 8px;
+        }
         .ders-card {
             padding: 1em;
             border-radius: 10px;
             margin-bottom: 1em;
-            color: #fff;
+            color: white;
         }
+        .ders-Türkçe { background-color: #2196F3; }
+        .ders-T.C\. İnkılap Tarihi \(Sosyal Bilgiler\) { background-color: #9C27B0; }
+        .ders-Din Kültürü ve Ahlak Bilgisi { background-color: #4CAF50; }
+        .ders-Yabancı Dil { background-color: #FF9800; }
+        .ders-Matematik { background-color: #f44336; }
+        .ders-Fen Bilimleri { background-color: #3F51B5; }
+
         .ders-card h2 {
             margin-top: 0;
+            margin-bottom: 0.8em;
         }
         .soru-grup {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
-            gap: 5px;
-            margin-top: 10px;
+            gap: 6px;
         }
         .soru-grup input {
             text-align: center;
             font-weight: bold;
-            padding: 8px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
+            padding: 10px 0;
+            border-radius: 6px;
+            border: none;
+            background: rgba(255 255 255 / 0.8);
+            font-size: 16px;
+            transition: background-color 0.3s ease;
         }
-        .error-message {
-            color: red;
-            text-align: center;
-            font-weight: bold;
+        .soru-grup input:focus {
+            background-color: #fff;
+            outline: 2px solid #fff;
+            box-shadow: 0 0 8px #81c784;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>Deneme Sınavı Cevap Girişi</h1>
+    <div class="container">
+        <h1>Deneme Sınavı Cevap Girişi</h1>
 
-    {% if hata %}
-        <div class="error-message">{{ hata }}</div>
-    {% endif %}
+        {% if hata %}
+            <div class="error-message">{{ hata }}</div>
+        {% endif %}
 
-    <form method="post" action="/">
-        <input type="text" name="ogrenci_kodu" placeholder="Öğrenci Kodu" required>
+        <form method="post" action="/">
+            <input type="text" name="ogrenci_kodu" placeholder="Öğrenci Kodu" required>
 
-        <select name="deneme_kodu" id="deneme_kodu" required onchange="loadDersler()">
-            <option value="">Deneme Seçin</option>
-            {% for deneme in deneme_listesi %}
-                <option value="{{ deneme }}">{{ deneme }}</option>
-            {% endfor %}
-        </select>
+            <select name="deneme_kodu" id="deneme_kodu" required onchange="loadDersler()">
+                <option value="">Deneme Seçin</option>
+                {% for deneme in deneme_listesi %}
+                    <option value="{{ deneme }}">{{ deneme }}</option>
+                {% endfor %}
+            </select>
 
-        <div id="dinamik-form-alani"></div>
+            <div id="dinamik-form-alani"></div>
 
-        <button type="submit">Sonuçları Göster</button>
-    </form>
-</div>
+            <button type="submit">Sonuçları Göster</button>
+        </form>
+    </div>
 
 <script>
     const cevapAnahtarlari = {{ cevap_anahtarlari | tojson }};
-
-    // Görünme sırasına göre ders adları ve sınıf isimleri eşleşmesi
-    const dersListesi = [
-        { ad: "Türkçe", sinif: "Turkce" },
-        { ad: "T.C. İnkılap Tarihi (Sosyal Bilgiler)", sinif: "Inkilap" },
-        { ad: "Din Kültürü ve Ahlak Bilgisi", sinif: "Din" },
-        { ad: "Yabancı Dil", sinif: "Yabanci" },
-        { ad: "Matematik", sinif: "Matematik" },
-        { ad: "Fen Bilimleri", sinif: "Fen" }
+    const dersSirasi = [
+        "T.C. İnkılap Tarihi (Sosyal Bilgiler)",
+        "Türkçe",
+        "Din Kültürü ve Ahlak Bilgisi",
+        "Yabancı Dil",
+        "Matematik",
+        "Fen Bilimleri"
     ];
+
+    function escapeCssClass(str) {
+        // CSS sınıfı için özel karakterleri kaçırır
+        return str.replace(/[\.\(\) ]/g, match => {
+            if(match === '.') return '\\.';
+            if(match === '(') return '\\(';
+            if(match === ')') return '\\)';
+            if(match === ' ') return '\\ ';
+            return match;
+        });
+    }
 
     function loadDersler() {
         const secilenDeneme = document.getElementById("deneme_kodu").value;
@@ -130,19 +155,19 @@
         if (secilenDeneme && cevapAnahtarlari[secilenDeneme]) {
             const dersler = cevapAnahtarlari[secilenDeneme];
 
-            dersListesi.forEach(({ ad, sinif }) => {
-                if (dersler[ad]) {
+            dersSirasi.forEach(ders => {
+                if (dersler[ders]) {
                     const dersDiv = document.createElement("div");
-                    dersDiv.className = `ders-card ders-${sinif}`;
-                    dersDiv.innerHTML = `<h2>${ad}</h2>`;
+                    dersDiv.className = "ders-card ders-" + ders.replace(/[\s\.\(\)]/g, '-');
+                    dersDiv.innerHTML = `<h2>${ders}</h2>`;
 
                     const soruGrup = document.createElement("div");
                     soruGrup.className = "soru-grup";
 
-                    dersler[ad].forEach((_, index) => {
+                    dersler[ders].forEach((_, index) => {
                         const input = document.createElement("input");
                         input.type = "text";
-                        input.name = `${ad}_${index + 1}`;
+                        input.name = `${ders}_${index + 1}`;
                         input.maxLength = 1;
                         input.placeholder = `${index + 1}`;
                         soruGrup.appendChild(input);
