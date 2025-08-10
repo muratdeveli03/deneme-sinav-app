@@ -7,15 +7,15 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
-            padding: 1em;
+            margin: 0; padding: 0;
         }
         .container {
             max-width: 900px;
-            margin: auto;
-            background: white;
+            margin: 50px auto;
+            background: #fff;
             padding: 2em;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
             border-radius: 10px;
-            box-shadow: 0 0 12px rgba(0,0,0,0.15);
         }
         h1, h2 {
             text-align: center;
@@ -26,88 +26,113 @@
             border-collapse: collapse;
             margin-top: 1em;
         }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
         th, td {
-            border: 1px solid #ddd;
             padding: 8px;
             text-align: center;
         }
-        tr.doğru {
-            background-color: #c8e6c9;
+        .dogru { background-color: #c8e6c9; }
+        .yanlis { background-color: #ffcdd2; }
+        .bos { background-color: #fff9c4; }
+        .ders-card {
+            padding: 1em;
+            border-radius: 10px;
+            margin-bottom: 1em;
+            color: #fff;
         }
-        tr.yanlış {
-            background-color: #ffcdd2;
-        }
-        tr.boş {
-            background-color: #e0e0e0;
-        }
-        .puan {
-            font-size: 1.2em;
+        /* Renkler index.html ile uyumlu */
+        .ders-turkce { background-color: #2196F3; }
+        .ders-inkilap-tarihi { background-color: #9C27B0; }
+        .ders-sosyal-bilgiler { background-color: #27F5D3; }
+        .ders-din-kulturu-ve-ahlak-bilgisi { background-color: #4CAF50; }
+        .ders-yabanci-dil { background-color: #FF9800; }
+        .ders-matematik { background-color: #f44336; }
+        .ders-fen-bilimleri { background-color: #3F51B5; }
+
+        .dogru-sik {
             font-weight: bold;
-            margin-top: 1em;
-            text-align: center;
-            color: #4CAF50;
+            color: #000;
         }
-        .ranking-table {
+        .puan-tablosu {
             margin-top: 2em;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>{{ ad }} ({{ kod }}) - {{ deneme_kodu }} Sonuçları</h1>
+    <h1>{{ ogrenci_kodu }} - {{ deneme_kodu }} Sonuçları</h1>
 
-    {% for ders, sorular in sonuc.items() %}
-        <h2>{{ ders }}</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Soru</th>
-                    <th>Verilen Cevap</th>
-                    <th>Doğru Cevap</th>
-                    <th>Durum</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for i in range(sorular|length) %}
-                {% set s = sorular[i] %}
-                <tr class="{{ s.durum }}">
-                    <td>{{ i + 1 }}</td>
-                    <td>{{ s.verilen }}</td>
-                    <td>{{ s.dogru }}</td>
-                    <td>{{ s.durum | capitalize }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+    {% set ders_sirasi = [
+        "Türkçe",
+        "inkılap Tarihi",
+        "Sosyal Bilgiler",
+        "Din Kültürü ve Ahlak Bilgisi",
+        "Yabancı Dil",
+        "Matematik",
+        "Fen Bilimleri"
+    ] %}
+
+    {% for ders in ders_sirasi %}
+        {% if cevaplar.get(ders) %}
+            {% set className = 'ders-' + ders.lower()
+                .replace('ç','c').replace('ş','s').replace('ğ','g')
+                .replace('ü','u').replace('ö','o').replace('ı','i')
+                .replace(' ','-').replace('(','').replace(')','')
+                .replace('.','').replace('&','').replace('/','-')
+            %}
+            <div class="ders-card {{ className }}">
+                <h2>{{ ders }}</h2>
+                <table>
+                    <tr>
+                        <th>Soru</th>
+                        <th>Senin Cevabın</th>
+                        <th>Doğru Cevap</th>
+                    </tr>
+                    {% for i in range(cevaplar[ders]|length) %}
+                        {% set ogr_cevap = cevaplar[ders][i] %}
+                        {% set dogru_cevap = cevap_anahtarlari[ders][i] %}
+                        {% if ogr_cevap == dogru_cevap %}
+                            <tr class="dogru">
+                                <td>{{ i+1 }}</td>
+                                <td>{{ ogr_cevap }}</td>
+                                <td>{{ dogru_cevap }}</td>
+                            </tr>
+                        {% elif ogr_cevap == "" %}
+                            <tr class="bos">
+                                <td>{{ i+1 }}</td>
+                                <td>Boş</td>
+                                <td class="dogru-sik">{{ dogru_cevap }}</td>
+                            </tr>
+                        {% else %}
+                            <tr class="yanlis">
+                                <td>{{ i+1 }}</td>
+                                <td>{{ ogr_cevap }}</td>
+                                <td class="dogru-sik">{{ dogru_cevap }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
     {% endfor %}
 
-    <div class="puan">
-        Toplam Puanınız: {{ puan }}
-    </div>
-
-    <div class="ranking-table">
-        <h2>Öğrenci Puan Sıralaması</h2>
+    <div class="puan-tablosu">
+        <h2>Puan Sıralaması</h2>
         <table>
-            <thead>
+            <tr>
+                <th>Sıra</th>
+                <th>Öğrenci</th>
+                <th>Puan</th>
+            </tr>
+            {% for sira, ogrenci in enumerate(siralama, start=1) %}
                 <tr>
-                    <th>Sıra</th>
-                    <th>Öğrenci Kodu</th>
-                    <th>Öğrenci Adı</th>
-                    <th>Deneme</th>
-                    <th>Puan</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for i, r in enumerate(sirali_sonuc, 1) %}
-                <tr>
-                    <td>{{ i }}</td>
-                    <td>{{ r.ogrenci_kodu }}</td>
-                    <td>{{ r.ogrenci_adi }}</td>
-                    <td>{{ r.deneme_kodu }}</td>
-                    <td>{{ r.puan }}</td>
+                    <td>{{ sira }}</td>
+                    <td>{{ ogrenci.ogrenci_kodu }}</td>
+                    <td>{{ ogrenci.puan }}</td>
                 </tr>
             {% endfor %}
-            </tbody>
         </table>
     </div>
 </div>
