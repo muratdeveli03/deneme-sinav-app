@@ -93,7 +93,7 @@ def calculate_total_score(per_ders, katsayilar):
 # Sabit ders sırası (isteğe bağlı değiştirebilirsin)
 DERS_SIRASI = [
     "Türkçe",
-    "İnkılap Tarihi",
+    "inkılap Tarihi",
     "Sosyal Bilgiler",
     "Din Kültürü ve Ahlak Bilgisi",
     "Yabancı Dil",
