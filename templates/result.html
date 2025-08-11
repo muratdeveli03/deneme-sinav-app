@@ -1,140 +1,74 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <title>Deneme Sonuçları</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0; padding: 0;
-        }
-        .container {
-            max-width: 900px;
-            margin: 50px auto;
-            background: #fff;
-            padding: 2em;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            border-radius: 10px;
-        }
-        h1, h2 {
-            text-align: center;
-            color: #333;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1em;
-        }
-        table, th, td {
-            border: 1px solid #ccc;
-        }
-        th, td {
-            padding: 8px;
-            text-align: center;
-        }
-        .dogru { background-color: #c8e6c9; }
-        .yanlis { background-color: #ffcdd2; }
-        .bos { background-color: #fff9c4; }
-        .ders-card {
-            padding: 1em;
-            border-radius: 10px;
-            margin-bottom: 1em;
-            color: #fff;
-        }
-        /* Renkler index.html ile uyumlu */
-        .ders-turkce { background-color: #2196F3; }
-        .ders-inkilap-tarihi { background-color: #9C27B0; }
-        .ders-sosyal-bilgiler { background-color: #27F5D3; }
-        .ders-din-kulturu-ve-ahlak-bilgisi { background-color: #4CAF50; }
-        .ders-yabanci-dil { background-color: #FF9800; }
-        .ders-matematik { background-color: #f44336; }
-        .ders-fen-bilimleri { background-color: #3F51B5; }
-
-        .dogru-sik {
-            font-weight: bold;
-            color: #000;
-        }
-        .puan-tablosu {
-            margin-top: 2em;
-        }
-    </style>
+    <meta charset="utf-8" />
+    <title>Sonuçlar - {{ ogrenci_kodu }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-<div class="container">
-    <h1>{{ ogrenci_kodu }} - {{ deneme_kodu }} Sonuçları</h1>
+<div class="wrap">
+  <div class="card">
+    <h1>Sonuçlar</h1>
+    <p><strong>Öğrenci:</strong> {{ ogrenci_adi or ogrenci_kodu }} &nbsp; | &nbsp; <strong>Öğrenci Kodu:</strong> {{ ogrenci_kodu }} &nbsp; | &nbsp; <strong>Deneme:</strong> {{ deneme_kodu }}</p>
 
-    {% set ders_sirasi = [
-        "Türkçe",
-        "inkılap Tarihi",
-        "Sosyal Bilgiler",
-        "Din Kültürü ve Ahlak Bilgisi",
-        "Yabancı Dil",
-        "Matematik",
-        "Fen Bilimleri"
-    ] %}
+    <h2>Genel Puan: <span class="big">{{ toplam_puan }}</span></h2>
 
+    <!-- Ders bazlı sonuç özetleri -->
     {% for ders in ders_sirasi %}
-        {% if cevaplar.get(ders) %}
-            {% set className = 'ders-' + ders.lower()
-                .replace('ç','c').replace('ş','s').replace('ğ','g')
-                .replace('ü','u').replace('ö','o').replace('ı','i')
-                .replace(' ','-').replace('(','').replace(')','')
-                .replace('.','').replace('&','').replace('/','-')
-            %}
-            <div class="ders-card {{ className }}">
-                <h2>{{ ders }}</h2>
-                <table>
-                    <tr>
-                        <th>Soru</th>
-                        <th>Senin Cevabın</th>
-                        <th>Doğru Cevap</th>
-                    </tr>
-                    {% for i in range(cevaplar[ders]|length) %}
-                        {% set ogr_cevap = cevaplar[ders][i] %}
-                        {% set dogru_cevap = cevap_anahtarlari[ders][i] %}
-                        {% if ogr_cevap == dogru_cevap %}
-                            <tr class="dogru">
-                                <td>{{ i+1 }}</td>
-                                <td>{{ ogr_cevap }}</td>
-                                <td>{{ dogru_cevap }}</td>
-                            </tr>
-                        {% elif ogr_cevap == "" %}
-                            <tr class="bos">
-                                <td>{{ i+1 }}</td>
-                                <td>Boş</td>
-                                <td class="dogru-sik">{{ dogru_cevap }}</td>
-                            </tr>
-                        {% else %}
-                            <tr class="yanlis">
-                                <td>{{ i+1 }}</td>
-                                <td>{{ ogr_cevap }}</td>
-                                <td class="dogru-sik">{{ dogru_cevap }}</td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
-                </table>
-            </div>
-        {% endif %}
+      {% if per_ders.get(ders) %}
+        {% set info = per_ders[ders] %}
+        <div class="subject s-{{ ders|lower
+            |replace('ç','c')|replace('ş','s')|replace('ğ','g')|replace('ü','u')|replace('ö','o')|replace('ı','i')
+            |replace(' ','-')|replace('/','-') }}">
+          <h3>{{ ders }}</h3>
+
+          <div class="summary">
+            <div><strong>Doğru:</strong> {{ info.dogru }}</div>
+            <div><strong>Yanlış:</strong> {{ info.yanlis }}</div>
+            <div><strong>Boş:</strong> {{ info.bos }}</div>
+            <div><strong>Net:</strong> {{ info.net }}</div>
+            <div><strong>Katsayı:</strong> {{ katsayilar.get(ders, 0) }}</div>
+            <div><strong>Ders Puanı:</strong> {{ (info.net * katsayilar.get(ders,0))|round(2) }}</div>
+          </div>
+
+          <table class="qtable">
+            <thead>
+              <tr><th>#</th><th>Senin</th><th>Doğru</th><th>Durum</th></tr>
+            </thead>
+            <tbody>
+              {% for q in info.qstatus %}
+                <tr class="{{ 'ok' if q.durum=='dogru' else ('empty' if q.durum=='bos' else 'bad') }}">
+                  <td>{{ q.no }}</td>
+                  <td>{{ q.given }}</td>
+                  <td>{{ q.correct }}</td>
+                  <td>{{ q.durum }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
     {% endfor %}
 
-    <div class="puan-tablosu">
-        <h2>Puan Sıralaması</h2>
-        <table>
-            <tr>
-                <th>Sıra</th>
-                <th>Öğrenci</th>
-                <th>Puan</th>
-            </tr>
-            {% for sira, ogrenci in enumerate(siralama, start=1) %}
-                <tr>
-                    <td>{{ sira }}</td>
-                    <td>{{ ogrenci.ogrenci_kodu }}</td>
-                    <td>{{ ogrenci.puan }}</td>
-                </tr>
-            {% endfor %}
-        </table>
+    <h2>Puan Sıralaması ({{ deneme_kodu }})</h2>
+    <table class="ranking">
+      <thead><tr><th>Sıra</th><th>Öğrenci</th><th>Kod</th><th>Puan</th></tr></thead>
+      <tbody>
+        {% for r in ranking %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ r.ogrenci_adi }}</td>
+            <td>{{ r.ogrenci_kodu }}</td>
+            <td>{{ r.puan }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div style="text-align:center;margin-top:18px;">
+      <a class="btn" href="{{ url_for('index') }}">Yeni Giriş</a>
     </div>
+  </div>
 </div>
 </body>
 </html>
