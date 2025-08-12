@@ -37,9 +37,9 @@ input[type=text], select{width:100%;padding:10px;border-radius:8px;border:1px so
 /* question table */
 .qtable{width:100%;border-collapse:collapse;margin-top:8px;background:#fff;color:#0b2a3b;border-radius:8px;overflow:hidden;}
 .qtable th, .qtable td{padding:8px;border-bottom:1px solid #eef2f7;text-align:center;}
-.qtable tr.ok{background:#e6f4ea;}
-.qtable tr.bad{background:#fff0f0;}
-.qtable tr.empty{background:#fffbea;}
+.qtable tr.ok{background:#a0f9b9;}
+.qtable tr.bad{background:#faa6a6;}
+.qtable tr.empty{background:#f7e492;}
 
 /* ranking */
 .ranking{width:100%;border-collapse:collapse;margin-top:8px;}
