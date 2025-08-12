@@ -41,7 +41,13 @@
                   <td>{{ q.no }}</td>
                   <td>{{ q.given }}</td>
                   <td>{{ q.correct }}</td>
-                  <td>{{ q.durum }}</td>
+                  <td>
+                    {% if q.durum == 'dogru' %}Doğru
+                    {% elif q.durum == 'yanlis' %}Yanlış
+                    {% elif q.durum == 'bos' %}Boş
+                    {% else %}{{ q.durum }}
+                    {% endif %}
+                  </td>
                 </tr>
               {% endfor %}
             </tbody>
