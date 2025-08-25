@@ -68,5 +68,9 @@
   
   "English Test - Grade 3.1": {
     "Yabancı Dil": ["D", "A", "B", "B", "A", "C", "A", "D", "C", "B", "A", "B", "D", "A", "A", "D", "C", "D", "C", "B"]
-  }
+  },
+  
+  "3. Sınıf Tüm Üniteler Değerlendirme": {
+    "Yabancı Dil": ["A", "A", "A", "C", "C", "C", "A", "A", "C", "B", "C", "A", "A", "A", "A", "B", "A", "C", "B", "B"]
+  },
 }
